@@ -5,6 +5,10 @@ defmodule Commands.Command do
     title: "Undefined",
     description: "Undefined",
     aliases: [],
-    examples: []
+    examples: [],
+    active: true,
+    for_registered: true,
+    for_unregistered: false,
+    for_admin_only: false
   )
 end

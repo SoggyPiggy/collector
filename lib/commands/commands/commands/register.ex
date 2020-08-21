@@ -6,7 +6,9 @@ defmodule Commands.Command.Registry do
     title: "Register",
     description: "Registers the user an account",
     aliases: ["register"],
-    examples: ["register"]
+    examples: ["register"],
+    for_registered: false,
+    for_unregistered: true,
   }
 
   def module(), do: @command

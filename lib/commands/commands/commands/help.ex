@@ -9,14 +9,9 @@ defmodule Commands.Command.Help do
 
   def module(), do: @command
 
-  def execute(_args, {nil, message}),
-    do: send_help(Commands.CommandOrganiser.commands(false), message)
-  def execute(_args, {_account, message}),
-    do: send_help(Commands.CommandOrganiser.commands(true), message)
-
-  defp send_help(commands, message) do
+  def execute(_args, {account, message}) do
     "__**Help Menu**__\n" <> (
-      commands
+      Commands.commands(account != nil)
       |> Enum.map(fn command -> command.module() end)
       |> Enum.map(fn command -> "**#{command.title}**: #{command.description}" end)
       |> Enum.join("\n")

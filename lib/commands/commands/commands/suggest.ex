@@ -1,4 +1,6 @@
 defmodule Commands.Command.Suggest do
+  alias Collector.Repo
+
   @command %Commands.Command{
     id: :suggest,
     title: "Suggest",
@@ -14,7 +16,7 @@ defmodule Commands.Command.Suggest do
     %{author: %{username: username, discriminator: discriminator}} = message
   }) do
     account
-    |> Database.create_suggestion(%{
+    |> Repo.create_suggestion(%{
       content: content,
       discord_username: "#{username}##{discriminator}"
     })

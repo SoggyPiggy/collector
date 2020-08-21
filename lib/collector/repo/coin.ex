@@ -60,7 +60,7 @@ defmodule Collector.Repo.Coin do
   def get_art_path(coin, ext), do: get_art_path(coin) <> ext
   def get_art_path(coin) do
     coin
-    |> Collector.Repo.preload(:category)
+    |> Repo.preload(:category)
     |> get_art_path_get_path()
   end
 

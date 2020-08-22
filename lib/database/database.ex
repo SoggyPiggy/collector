@@ -44,4 +44,6 @@ defmodule Database do
 
   defdelegate get_seeding_version(), to: GlobalSetting
   defdelegate set_seeding_version(value), to: GlobalSetting
+
+  defdelegate preload(table, association), to: Database.Repo
 end

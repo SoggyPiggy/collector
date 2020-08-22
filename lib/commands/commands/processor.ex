@@ -17,8 +17,8 @@ defmodule Commands.Processor do
 
   defp process_arguments(arguments), do: arguments
 
-  defp process_command(command, %Collector.Repo.Account{} = account),
-    do: process_command(command, Collector.Repo.has_admin_override(account))
+  defp process_command(command, %Database.Repo.Account{} = account),
+    do: process_command(command, Database.has_admin_override(account))
   defp process_command(command, nil) do
     Commands.commands_unregistered()
     |> Commands.find(command)

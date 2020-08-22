@@ -18,7 +18,7 @@ defmodule Commands.Command.Help do
       |> Enum.map(fn command -> "**#{command.title}**: #{command.description}" end)
       |> Enum.join("\n")
     )
-    |> DiscordReceiver.Speaker.send(:direct, message)
+    |> Discord.send(:direct, message)
   end
 
   defp get_list(nil), do: Commands.commands_unregistered()

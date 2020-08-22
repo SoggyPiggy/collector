@@ -23,6 +23,6 @@ defmodule Commands.Command.Suggest do
 
     defp confirm_recording({:ok, _suggestion}, message) do
       "Suggestion has been recorded"
-      |> DiscordReceiver.Speaker.send(:reply, message)
+    |> Discord.send(:reply, message)
   end
 end

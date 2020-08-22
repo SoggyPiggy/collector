@@ -23,8 +23,8 @@ defmodule Commands.Command.Changelog do
     |> Database.has_admin_override()
     |> direct_send(content, message)
   end
-  defp direct_send(true, content, message), do: DiscordReceiver.Speaker.send(content, :reply, message)
-  defp direct_send(false, content, message), do: DiscordReceiver.Speaker.send(content, :direct, message)
+  defp direct_send(true, content, message), do: Discord.send(content, :reply, message)
+  defp direct_send(false, content, message), do: Discord.send(content, :direct, message)
 
   defp parse_log(%{name: name, version: version, patches: patches}),
     do: ["__**#{name}**__" | parse_patches(patches, version)]

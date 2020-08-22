@@ -27,7 +27,7 @@ defmodule Commands.Command.Collect do
     <@#{id}>, You're unable to collect again today.
     The daily reset will happen in #{get_time_until_next()}
     """
-    |> DiscordReceiver.Speaker.send(:reply, message)
+    |> Discord.send(:reply, message)
   end
 
   defp get_last_collect(account) do
@@ -62,7 +62,7 @@ defmodule Commands.Command.Collect do
       """,
       file: %{name: "#{data.coin.id}.png", body: coin_art}
     }
-    |> DiscordReceiver.Speaker.send(:reply, message)
+    |> Discord.send(:reply, message)
   end
 
   defp get_condition_grade(condition) do

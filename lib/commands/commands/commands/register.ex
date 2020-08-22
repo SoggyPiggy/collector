@@ -24,6 +24,6 @@ defmodule Commands.Command.Registry do
     The `help` command will now display commands more relevant to you.
     You will now start to collect coins while using discord. You may also collect one coin a day using the `collect` command. *Reset happens at 8pm EST*
     """
-    |> DiscordReceiver.Speaker.send(:notify, user)
+    |> Discord.send(:notify, user)
   end
 end

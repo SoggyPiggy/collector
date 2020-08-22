@@ -1,4 +1,4 @@
-defmodule Collector.Repo.Migrations.CreateSuggestions do
+defmodule Database.Repo.Migrations.CreateSuggestions do
   use Ecto.Migration
 
   def change do

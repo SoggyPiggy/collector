@@ -1,4 +1,4 @@
-defmodule Collector.Repo.Migrations.CreateGlobalSettings do
+defmodule Database.Repo.Migrations.CreateGlobalSettings do
   use Ecto.Migration
 
   def change do

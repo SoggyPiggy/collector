@@ -8,7 +8,7 @@
 use Mix.Config
 
 config :collector,
-  ecto_repos: [Collector.Repo]
+  ecto_repos: [Database.Repo]
 
 # Configures the endpoint
 config :collector, CollectorWeb.Endpoint,

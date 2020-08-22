@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :collector, Collector.Repo,
+config :collector, Database.Repo,
   username: "postgres",
   password: "postgres",
   database: "collector_test",

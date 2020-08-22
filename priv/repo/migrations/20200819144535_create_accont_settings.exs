@@ -1,4 +1,4 @@
-defmodule Collector.Repo.Migrations.CreateAccontSettings do
+defmodule Database.Repo.Migrations.CreateAccontSettings do
   use Ecto.Migration
 
   def change do

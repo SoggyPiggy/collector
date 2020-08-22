@@ -11,7 +11,7 @@ database_url =
     For example: ecto://USER:PASS@HOST/DATABASE
     """
 
-config :collector, Collector.Repo,
+config :collector, Database.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "",
   ssl: true,

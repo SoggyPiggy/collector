@@ -18,7 +18,7 @@ defmodule Collector.DataCase do
 
   using do
     quote do
-      alias Collector.Repo
+      alias Database.Repo
 
       import Ecto
       import Ecto.Changeset
@@ -28,10 +28,10 @@ defmodule Collector.DataCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Collector.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Database.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Collector.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(Database.Repo, {:shared, self()})
     end
 
     :ok

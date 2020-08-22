@@ -1,4 +1,4 @@
-defmodule Collector.Repo.Migrations.CreateCoinTransactions do
+defmodule Database.Repo.Migrations.CreateCoinTransactions do
   use Ecto.Migration
 
   def change do

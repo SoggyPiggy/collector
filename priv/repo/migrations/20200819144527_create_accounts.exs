@@ -9,5 +9,4 @@ defmodule Collector.Repo.Migrations.CreateAccounts do
 
     create unique_index(:accounts, [:discord_id])
   end
-  end
 end

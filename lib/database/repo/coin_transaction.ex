@@ -22,8 +22,8 @@ defmodule Database.Repo.CoinTransaction do
   def create(coin_instance, {:ok, account}, params), do: create(coin_instance, account, params)
   def create(coin_instance, account, params) do
     %Database.Repo.CoinTransaction{}
-    |> Repo.add_association(coin_instance)
-    |> Repo.add_association(account)
+    |> Database.add_association(coin_instance)
+    |> Database.add_association(account)
     |> Changeset.cast(params, [:amount, :reason])
     |> Changeset.validate_required([:reason, :account_id, :coin_instance_id])
     |> Changeset.validate_inclusion(:reason, @transaction_reasons)

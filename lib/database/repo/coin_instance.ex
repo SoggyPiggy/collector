@@ -16,7 +16,7 @@ defmodule Database.Repo.CoinInstance do
   def create({:ok, coin}, params), do: create(coin, params)
   def create(coin, params) do
     %Database.Repo.CoinInstance{}
-    |> Repo.add_association(coin)
+    |> Database.add_association(coin)
     |> Changeset.cast(params, [:condition])
     |> Changeset.validate_required([:condition])
     |> Repo.insert()

@@ -16,7 +16,7 @@ defmodule Database.Repo.Coin do
 
   def create(category, params) do
     %Database.Repo.Coin{}
-    |> Repo.add_association(category)
+    |> Database.add_association(category)
     |> Changeset.cast(params, [:name, :file_dir, :in_circulation, :weight])
     |> Repo.insert()
   end

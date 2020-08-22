@@ -15,7 +15,7 @@ defmodule Database.Repo.Suggestion do
 
   def create(account, params) do
     %Database.Repo.Suggestion{}
-    |> Repo.add_association(account)
+    |> Database.add_association(account)
     |> Changeset.cast(params, [:content, :discord_username])
     |> Changeset.validate_required([:content])
     |> Repo.insert()

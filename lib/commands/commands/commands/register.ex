@@ -1,6 +1,4 @@
 defmodule Commands.Command.Registry do
-  alias Collector.Repo
-
   @command %Commands.Command{
     id: :register,
     title: "Register",
@@ -15,7 +13,7 @@ defmodule Commands.Command.Registry do
 
   def execute(_args, {nil, %{author: user}}) do
     user
-    |> Repo.create_account()
+    |> Database.create_account()
     |> validate_and_notify(user)
   end
   def execute(_args, _data), do: nil

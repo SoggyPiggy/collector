@@ -1,9 +1,5 @@
-defmodule Collector.Repo do
-  use Ecto.Repo,
-    otp_app: :collector,
-    adapter: Ecto.Adapters.Postgres
-
-  alias Collector.Repo.{
+defmodule Database do
+  alias Database.Repo.{
     Account,
     AccountSettings,
     Category,

@@ -1,5 +1,5 @@
-defmodule Collector.Repo.AccountSettings do
-  alias Collector.Repo
+defmodule Database.Repo.AccountSettings do
+  alias Database.Repo
   alias Ecto.{Query, Changeset}
   require Query
   use Ecto.Schema
@@ -9,11 +9,11 @@ defmodule Collector.Repo.AccountSettings do
     field :admin, :boolean, default: false
     field :admin_enabled, :boolean, default: false
 
-    belongs_to :account, Collector.Repo.Account
+    belongs_to :account, Database.Repo.Account
   end
 
-  def get(%Collector.Repo.Account{id: id} = account) do
-    Collector.Repo.AccountSettings
+  def get(%Database.Repo.Account{id: id} = account) do
+    Database.Repo.AccountSettings
     |> Query.where(account_id: ^id)
     |> Repo.one()
     |> case do
@@ -27,7 +27,7 @@ defmodule Collector.Repo.AccountSettings do
     account_settings
   end
   def create(account, params \\ %{}) do
-    %Collector.Repo.AccountSettings{}
+    %Database.Repo.AccountSettings{}
     |> Repo.add_association(account)
     |> Changeset.cast(params, [])
     |> Changeset.unique_constraint(:account_id)

@@ -1,6 +1,4 @@
 defmodule Commands.Command.Changelog do
-  alias Collector.Repo
-
   @command %Commands.Command{
     id: :patch_notes,
     title: "Patch Notes",
@@ -21,8 +19,8 @@ defmodule Commands.Command.Changelog do
 
   defp send_message(content, {account, message}) do
     account
-    |> Repo.get_account_settings()
-    |> Repo.has_admin_override()
+    |> Database.get_account_settings()
+    |> Database.has_admin_override()
     |> direct_send(content, message)
   end
   defp direct_send(true, content, message), do: DiscordReceiver.Speaker.send(content, :reply, message)

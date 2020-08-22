@@ -1,4 +1,4 @@
-defmodule Collector.Repo.Utils do
+defmodule Database.Repo.Utils do
   def add_association(table, %{id: id} = associate) do
     table
     |> Map.put(

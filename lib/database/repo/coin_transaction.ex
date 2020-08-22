@@ -1,5 +1,5 @@
-defmodule Collector.Repo.CoinTransaction do
-  alias Collector.Repo
+defmodule Database.Repo.CoinTransaction do
+  alias Database.Repo
   alias Ecto.{Query, Changeset}
   require Query
   use Ecto.Schema
@@ -12,8 +12,8 @@ defmodule Collector.Repo.CoinTransaction do
     field :amount, :integer, default: 1
     field :reason, :string
 
-    belongs_to :account, Collector.Repo.Account
-    belongs_to :coin_instance, Collector.Repo.CoinInstance
+    belongs_to :account, Database.Repo.Account
+    belongs_to :coin_instance, Database.Repo.CoinInstance
 
     timestamps([type: :utc_datetime, updated_at: false])
   end
@@ -21,7 +21,7 @@ defmodule Collector.Repo.CoinTransaction do
   def create({:ok, coin_instance}, account, params), do: create(coin_instance, account, params)
   def create(coin_instance, {:ok, account}, params), do: create(coin_instance, account, params)
   def create(coin_instance, account, params) do
-    %Collector.Repo.CoinTransaction{}
+    %Database.Repo.CoinTransaction{}
     |> Repo.add_association(coin_instance)
     |> Repo.add_association(account)
     |> Changeset.cast(params, [:amount, :reason])
@@ -31,7 +31,7 @@ defmodule Collector.Repo.CoinTransaction do
   end
 
   def get_last(account, reason) do
-    Collector.Repo.CoinTransaction
+    Database.Repo.CoinTransaction
     |> Query.where([account_id: ^account.id, reason: ^reason])
     |> Query.last()
     |> Repo.one()

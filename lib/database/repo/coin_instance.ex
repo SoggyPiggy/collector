@@ -1,5 +1,5 @@
-defmodule Collector.Repo.CoinInstance do
-  alias Collector.Repo
+defmodule Database.Repo.CoinInstance do
+  alias Database.Repo
   alias Ecto.{Query, Changeset}
   require Query
   use Ecto.Schema
@@ -7,15 +7,15 @@ defmodule Collector.Repo.CoinInstance do
   schema "coin_instances" do
     field :condition, :float
 
-    belongs_to :coin, Collector.Repo.Coin
-    has_many :coin_transactions, Collector.Repo.CoinTransaction
+    belongs_to :coin, Database.Repo.Coin
+    has_many :coin_transactions, Database.Repo.CoinTransaction
 
     timestamps([type: :utc_datetime])
   end
 
   def create({:ok, coin}, params), do: create(coin, params)
   def create(coin, params) do
-    %Collector.Repo.CoinInstance{}
+    %Database.Repo.CoinInstance{}
     |> Repo.add_association(coin)
     |> Changeset.cast(params, [:condition])
     |> Changeset.validate_required([:condition])

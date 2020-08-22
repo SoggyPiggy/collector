@@ -1,5 +1,5 @@
-defmodule Collector.Repo.GlobalSetting do
-  alias Collector.Repo
+defmodule Database.Repo.GlobalSetting do
+  alias Database.Repo
   alias Ecto.{Query, Changeset}
   require Query
   use Ecto.Schema
@@ -26,7 +26,7 @@ defmodule Collector.Repo.GlobalSetting do
   defp get(key, type, default), do: get_setting(key, type, default) |> Map.fetch!(type)
 
   defp get_setting(key, type, default) do
-    Collector.Repo.GlobalSetting
+    Database.Repo.GlobalSetting
     |> Query.where(key: ^key)
     |> Repo.one()
     |> case do
@@ -36,7 +36,7 @@ defmodule Collector.Repo.GlobalSetting do
   end
 
   defp create(key, type, value) do
-    %Collector.Repo.GlobalSetting{}
+    %Database.Repo.GlobalSetting{}
     |> Changeset.cast(Map.put(%{key: key}, type, value), [:key | @values])
     |> Changeset.validate_required([:key])
     |> Repo.insert!()

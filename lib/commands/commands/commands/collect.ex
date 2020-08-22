@@ -1,6 +1,4 @@
 defmodule Commands.Command.Collect do
-  alias Collector.Repo
-
   @command %Commands.Command{
     id: :collect,
     title: "Collect",
@@ -19,9 +17,9 @@ defmodule Commands.Command.Collect do
   end
 
   defp collect(:lt, {account, message}) do
-    Repo.select_random_coin()
-    |> Repo.generate_coin_instance()
-    |> Repo.create_coin_transaction(account, %{reason: "collect"})
+    Database.select_random_coin()
+    |> Database.generate_coin_instance()
+    |> Database.create_coin_transaction(account, %{reason: "collect"})
     |> send_reply(message)
   end
   defp collect(_, {%{discord_id: id}, message}) do
@@ -34,7 +32,7 @@ defmodule Commands.Command.Collect do
 
   defp get_last_collect(account) do
     account
-    |> Repo.get_last_coin_transaction("collect")
+    |> Database.get_last_coin_transaction("collect")
   end
 
   defp compare_dates(nil), do: :lt
@@ -49,7 +47,7 @@ defmodule Commands.Command.Collect do
       coin_transaction
       |> Map.get(:coin_instance)
       |> Map.get(:coin)
-      |> Repo.get_coin_art_path(".png")
+      |> Database.get_coin_art_path(".png")
       |> File.read!()
     data =
       coin_transaction
@@ -94,7 +92,7 @@ defmodule Commands.Command.Collect do
     coin = coin_instance.coin
     category =
       coin
-      |> Repo.preload(:category)
+      |> Database.preload(:category)
       |> Map.get(:category)
 
     %{

@@ -9,20 +9,20 @@ defmodule Commands.Command.Suggest do
 
   def module(), do: @command
 
-  def execute([content], {
+  def execute(suggestion, {
     account,
     %{author: %{username: username, discriminator: discriminator}} = message
   }) do
     account
     |> Database.create_suggestion(%{
-      content: content,
+      content: suggestion |> Enum.join(" "),
       discord_username: "#{username}##{discriminator}"
     })
     |> confirm_recording(message)
-    end
+  end
 
-    defp confirm_recording({:ok, _suggestion}, message) do
-      "Suggestion has been recorded"
+  defp confirm_recording({:ok, _suggestion}, message) do
+    "Suggestion has been recorded"
     |> Discord.send(:reply, message)
   end
 end

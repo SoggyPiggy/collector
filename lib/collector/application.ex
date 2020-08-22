@@ -9,11 +9,11 @@ defmodule Collector.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      Collector.Repo,
+      Database.Repo,
       # Start the endpoint when the application starts
-      CollectorWeb.Endpoint
-      # Starts a worker by calling: Collector.Worker.start_link(arg)
-      # {Collector.Worker, arg},
+      CollectorWeb.Endpoint,
+      # Start the nostrum discord connection
+      Discord.Consumer
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

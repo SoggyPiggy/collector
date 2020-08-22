@@ -18,34 +18,31 @@ defmodule Commands.Organiser do
       command.module().for_admin_only == false
     end)
   end
-  def commands(nil), do: commands(false)
-  def commands(true) do
+  def commands_registered() do
     commands()
     |> Enum.filter(fn command -> command.module().for_registered == true end)
   end
-  def commands(false) do
+  def commands_unregistered() do
     commands()
     |> Enum.filter(fn command -> command.module().for_unregistered == true end)
   end
 
-  def get(id, is_registered \\ nil), do: resolve(id, is_registered)
-
-  defp resolve(ids, is_registered) when is_list(ids), do: Enum.map(ids, fn id -> resolve(id, is_registered) end)
-  defp resolve(id, is_registered) when is_atom(id) do
-    is_registered
-    |> commands()
-    |> Enum.find(:error, fn command ->
-      command.module().id == id
-    end)
+  def find(command), do: find(commands_all(), command)
+  def find(commands, command_aliases) when is_list(command_aliases) do
+    command_aliases
+    |> Enum.map(fn command_alias -> find(commands, command_alias) end)
+    |> Enum.filter(fn command -> command != nil end)
   end
-  defp resolve(id, is_registered) when is_bitstring(id) do
-    is_registered
-    |> commands()
-    |> Enum.find(:error, fn command ->
-      command.module().aliases
-      |> Enum.find(fn command_alias ->
-        String.downcase(id) == String.downcase(command_alias)
-      end) != nil
+  def find(commands, command_id) when is_atom(command_id) do
+    commands
+    |> Enum.find(nil, fn command -> command.module().id == command_id end)
+  end
+  def find(commands, command_alias) when is_bitstring(command_alias) do
+    commands
+    |> Enum.find(nil, fn command ->
+      command.module()
+      |> Map.get(:aliases)
+      |> Enum.any?(fn command_module_alias -> command_module_alias == command_alias end)
     end)
   end
 end

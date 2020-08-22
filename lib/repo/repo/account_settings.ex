@@ -34,6 +34,6 @@ defmodule Collector.Repo.AccountSettings do
     |> Repo.insert()
   end
 
-  def has_admin_override(%{admin: admin, admin_enabled: admin_enabled}),
-    do: admin && admin_enabled
+  def has_admin_override(nil), do: false
+  def has_admin_override(%{admin: admin, admin_enabled: is_enabled}), do: admin && is_enabled
 end

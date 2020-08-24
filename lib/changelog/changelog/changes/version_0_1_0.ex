@@ -21,7 +21,7 @@ defmodule Changelog.Change.Version_0_1_0 do
             "Register command",
             "Collect command",
             "Suggest command",
-            "7 Categories",
+            "7 Sets",
             "90 coins",
           ]},
           {"WIP Features", [

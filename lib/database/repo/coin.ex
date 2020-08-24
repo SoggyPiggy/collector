@@ -10,13 +10,13 @@ defmodule Database.Repo.Coin do
     field :in_circulation, :boolean, default: true
     field :weight, :integer, autogenerate: {Enum, :random, [50..100]}
 
-    belongs_to :category, Database.Repo.Category
+    belongs_to :set, Database.Repo.Set
     has_many :coin_instances, Database.Repo.CoinInstance
   end
 
-  def create(category, params) do
+  def create(set, params) do
     %Database.Repo.Coin{}
-    |> Database.add_association(category)
+    |> Database.add_association(set)
     |> Changeset.cast(params, [:name, :file_dir, :in_circulation, :weight])
     |> Repo.insert()
   end
@@ -60,11 +60,11 @@ defmodule Database.Repo.Coin do
   def get_art_path(coin, ext), do: get_art_path(coin) <> ext
   def get_art_path(coin) do
     coin
-    |> Repo.preload(:category)
+    |> Repo.preload(:set)
     |> get_art_path_get_path()
   end
 
-  defp get_art_path_get_path(%{file_dir: file_dir, category: %{folder_dir: folder_dir}}) do
+  defp get_art_path_get_path(%{file_dir: file_dir, set: %{folder_dir: folder_dir}}) do
     File.cwd!()
     |> Path.join("assets")
     |> Path.join(folder_dir)

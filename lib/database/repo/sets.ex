@@ -1,10 +1,10 @@
-defmodule Database.Repo.Category do
+defmodule Database.Repo.Set do
   alias Database.Repo
   alias Ecto.{Query, Changeset}
   require Query
   use Ecto.Schema
 
-  schema "categories" do
+  schema "sets" do
     field :name, :string
     field :folder_dir, :string, default: "_default"
 
@@ -12,17 +12,17 @@ defmodule Database.Repo.Category do
   end
 
   def create(params) do
-    %Database.Repo.Category{}
+    %Database.Repo.Set{}
     |> Changeset.cast(params, [:name, :folder_dir])
     |> Repo.insert()
   end
 
-  def get_by_card(%{category_id: id}), do: get_by_id(id)
+  def get_by_card(%{set_id: id}), do: get_by_id(id)
 
-  def get_by_id(id), do: Repo.get!(Database.Repo.Category, id)
+  def get_by_id(id), do: Repo.get!(Database.Repo.Set, id)
 
   def get_by_name(name) do
-    Database.Repo.Category
+    Database.Repo.Set
     |> Query.where(:name, ^name)
     |> Repo.one()
   end

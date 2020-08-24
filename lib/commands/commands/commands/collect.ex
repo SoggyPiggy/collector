@@ -90,16 +90,16 @@ defmodule Commands.Command.Collect do
   defp get_coin_structs(coin_transaction) do
     coin_instance = coin_transaction.coin_instance
     coin = coin_instance.coin
-    category =
+    set =
       coin
-      |> Database.preload(:category)
-      |> Map.get(:category)
+      |> Database.preload(:set)
+      |> Map.get(:set)
 
     %{
       coin_transaction: coin_transaction,
       coin_instance: coin_instance,
       coin: coin,
-      category: category
+      set: set
     }
   end
 

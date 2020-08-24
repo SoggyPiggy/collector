@@ -5,7 +5,7 @@ defmodule Database.Repo.Migrations.CreateCoins do
     create table(:coins) do
       add :name, :string
       add :file_dir, :string
-      add :categories_id, references(:categories)
+      add :sets_id, references(:sets)
       add :in_circulation, :boolean
       add :weight, :integer
     end

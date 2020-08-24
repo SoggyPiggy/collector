@@ -1,8 +1,8 @@
-defmodule Database.Repo.Migrations.CreateCategories do
+defmodule Database.Repo.Migrations.CreateSets do
   use Ecto.Migration
 
   def change do
-    create table(:categories) do
+    create table(:sets) do
       add :name, :string
       add :folder_dir, :string
     end

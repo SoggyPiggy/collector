@@ -2,7 +2,7 @@ defmodule Database do
   alias Database.Repo.{
     Account,
     AccountSettings,
-    Category,
+    Set,
     Coin,
     CoinInstance,
     CoinTransaction,
@@ -19,12 +19,12 @@ defmodule Database do
   defdelegate get_account_settings(account), to: AccountSettings, as: :get
   defdelegate has_admin_override(settings), to: AccountSettings
 
-  defdelegate create_category(params), to: Category, as: :create
-  defdelegate get_category_by_card(card), to: Category, as: :get_by_card
-  defdelegate get_category_by_id(id), to: Category, as: :get_by_id
-  defdelegate get_category_by_name(name), to: Category, as: :get_by_name
+  defdelegate create_set(params), to: Set, as: :create
+  defdelegate get_set_by_card(card), to: Set, as: :get_by_card
+  defdelegate get_set_by_id(id), to: Set, as: :get_by_id
+  defdelegate get_set_by_name(name), to: Set, as: :get_by_name
 
-  defdelegate create_coin(category, params), to: Coin, as: :create
+  defdelegate create_coin(set, params), to: Coin, as: :create
   defdelegate get_coin_by_id(id), to: Coin, as: :get_by_id
   defdelegate get_coin_by_name(name), to: Coin, as: :get_by_name
   defdelegate select_random_coin(), to: Coin, as: :select_random

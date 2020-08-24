@@ -28,7 +28,7 @@ defmodule Database.Repo.AccountSettings do
   end
   def create(account, params \\ %{}) do
     %Database.Repo.AccountSettings{}
-    |> Repo.add_association(account)
+    |> Database.add_association(account)
     |> Changeset.cast(params, [])
     |> Changeset.unique_constraint(:account_id)
     |> Repo.insert()

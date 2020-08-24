@@ -35,5 +35,11 @@ defmodule Database.Repo.AccountSettings do
   end
 
   def has_admin_override(nil), do: false
-  def has_admin_override(%{admin: admin, admin_enabled: is_enabled}), do: admin && is_enabled
+  def has_admin_override(%Database.Repo.Account{} = account) do
+    account
+    |> Database.get_account_settings()
+    |> has_admin_override()
+  end
+  def has_admin_override(%Database.Repo.AccountSettings{admin: admin, admin_enabled: is_enabled}),
+    do: admin && is_enabled
 end

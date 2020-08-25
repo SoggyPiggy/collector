@@ -26,12 +26,10 @@ defmodule Discord.Consumer do
   defp get_account_admin({:ok, %{author: author} = message}) do
     author
     |> get_account()
-    |> get_admin()
     |> Tuple.append(message)
   end
 
   defp get_account(author), do: {Database.get_account_by_discord_user(author)}
-  defp get_admin({account}), do: {account, Database.has_admin_override(account)}
 
   defp pass_to_commands(data, input), do: Commands.execute(input, data)
 end

@@ -13,16 +13,11 @@ defmodule Commands.Command.Help do
   def execute(_args, {account, message}) do
     "__**Help Menu**__\n" <> (
       account
-      |> get_list()
+      |> Commands.get_appropriate_commands()
       |> Enum.map(fn command -> command.module() end)
       |> Enum.map(fn command -> "**#{command.title}**: #{command.description}" end)
       |> Enum.join("\n")
     )
     |> Discord.send(:direct, message)
   end
-
-  defp get_list(nil), do: Commands.commands_unregistered()
-  defp get_list(account), do: Database.has_admin_override(account) |> get_list(account)
-  defp get_list(true, _), do: Commands.commands_admin()
-  defp get_list(false, _), do: Commands.commands_registered()
 end

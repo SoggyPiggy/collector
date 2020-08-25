@@ -6,9 +6,8 @@ defmodule Commands.Command do
     description: "Undefined",
     aliases: [],
     examples: [],
-    active: true,
+    is_public: true,
     for_registered: true,
-    for_unregistered: false,
-    for_admin_only: false
+    for_unregistered: false
   )
 end

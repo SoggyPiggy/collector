@@ -13,6 +13,7 @@ defmodule Database.Repo.Suggestion do
     timestamps([type: :utc_datetime, updated_at: false])
   end
 
+  def create({:ok, account}, params), do: create(account, params)
   def create(account, params) do
     %Database.Repo.Suggestion{}
     |> Database.add_association(account)

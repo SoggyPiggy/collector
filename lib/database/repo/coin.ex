@@ -14,6 +14,7 @@ defmodule Database.Repo.Coin do
     has_many :coin_instances, Database.Repo.CoinInstance
   end
 
+  def create({:ok, set}, params), do: create(set, params)
   def create(set, params) do
     %Database.Repo.Coin{}
     |> Database.add_association(set)
@@ -59,15 +60,21 @@ defmodule Database.Repo.Coin do
 
   def get_art_path(coin, ext), do: get_art_path(coin) <> ext
   def get_art_path(coin) do
-    coin
-    |> Repo.preload(:set)
-    |> get_art_path_get_path()
-  end
-
-  defp get_art_path_get_path(%{file_dir: file_dir, set: %{folder_dir: folder_dir}}) do
     File.cwd!()
     |> Path.join("assets/static/images/coins")
-    |> Path.join(folder_dir)
-    |> Path.join(file_dir)
+    |> get_art_path_append_parent_dir(coin)
+    |> Path.join(coin.file_dir)
+  end
+
+  def get_art_path_append_parent_dir(path, %{set_id: nil}), do: path
+  def get_art_path_append_parent_dir(path, child) do
+    parent =
+      child
+      |> Repo.preload(:set)
+      |> Map.get(:set)
+
+    path
+    |> get_art_path_append_parent_dir(parent)
+    |> Path.join(parent.folder_dir)
   end
 end

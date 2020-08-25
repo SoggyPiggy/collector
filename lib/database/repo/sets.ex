@@ -13,6 +13,7 @@ defmodule Database.Repo.Set do
     has_many :coins, Database.Repo.Coin
   end
 
+  def create({:ok, set}, params), do: create(set, params)
   def create(set, params) do
     %Database.Repo.Set{}
     |> Database.add_association(set)

@@ -18,6 +18,8 @@ defmodule Database do
   defdelegate create_account_settings(account), to: AccountSettings, as: :create
   defdelegate get_account_settings(account), to: AccountSettings, as: :get
   defdelegate has_admin_override(settings), to: AccountSettings
+  defdelegate toggle_admin(account), to: AccountSettings
+  defdelegate make_admin(account), to: AccountSettings
 
   defdelegate create_set(params), to: Set, as: :create
   defdelegate get_set_by_card(card), to: Set, as: :get_by_card

@@ -42,4 +42,30 @@ defmodule Database.Repo.AccountSettings do
   end
   def has_admin_override(%Database.Repo.AccountSettings{admin: admin, admin_enabled: is_enabled}),
     do: admin && is_enabled
+
+  def make_admin(nil), do: {:error, "can not create admin from nil"}
+  def make_admin(settings) do
+    settings
+    |> ensure_settings()
+    |> Changeset.cast(%{admin: true}, [:admin])
+    |> Repo.update()
+  end
+
+
+  def toggle_admin({current, settings}) do
+    settings
+    |> ensure_settings()
+    |> Map.put(:admin_enabled, current)
+    |> Changeset.cast(%{admin_enabled: !current}, [:admin_enabled])
+    |> Repo.update()
+  end
+  def toggle_admin(settings) do
+    settings
+    |> ensure_settings()
+    |> Map.pop(:admin_enabled)
+    |> toggle_admin()
+  end
+
+  defp ensure_settings(%Database.Repo.AccountSettings{} = settings), do: settings
+  defp ensure_settings(%Database.Repo.Account{} = account), do: Database.get_account_settings(account)
 end

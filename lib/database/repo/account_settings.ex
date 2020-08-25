@@ -34,6 +34,13 @@ defmodule Database.Repo.AccountSettings do
     |> Repo.insert()
   end
 
+  def is_admin(nil), do: false
+  def is_admin(settings) do
+    settings
+    |> ensure_settings()
+    |> Map.get(:admin, false)
+  end
+
   def has_admin_override(nil), do: false
   def has_admin_override(%Database.Repo.Account{} = account) do
     account

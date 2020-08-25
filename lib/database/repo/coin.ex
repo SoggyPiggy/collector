@@ -66,7 +66,7 @@ defmodule Database.Repo.Coin do
 
   defp get_art_path_get_path(%{file_dir: file_dir, set: %{folder_dir: folder_dir}}) do
     File.cwd!()
-    |> Path.join("assets")
+    |> Path.join("assets/static/images/coins")
     |> Path.join(folder_dir)
     |> Path.join(file_dir)
   end

@@ -6,6 +6,7 @@ defmodule Commands.Processor do
     |> execute_command(data)
   end
 
+  defp execute_command({nil, _arguments}, _reply_data), do: {:error, "command not found"}
   defp execute_command({command, arguments}, {account, true, reply_data}),
     do: command.admin_execute(arguments, {account, reply_data})
   defp execute_command({command, arguments}, {account, false, reply_data}),

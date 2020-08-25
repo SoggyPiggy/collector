@@ -52,7 +52,7 @@ defmodule Commands.Organiser do
   def get_appropriate_commands(%Database.Repo.Account{} = account) do
     account
     |> Database.is_admin()
-    |> get_appropriate_commands()
+    |> get_appropriate_commands(account)
   end
   def get_appropriate_commands(false, _account), do: commands_registered()
   def get_appropriate_commands(true, _account), do: commands_admin()

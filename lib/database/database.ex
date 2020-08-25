@@ -44,6 +44,8 @@ defmodule Database do
   defdelegate create_suggestion(account, params), to: Suggestion, as: :create
 
   defdelegate add_association(table, association), to: Utils
+  defdelegate seed_data(), to: Utils
+  defdelegate seed_gen(file_name), to: Utils
 
   defdelegate get_seeding_version(), to: GlobalSetting
   defdelegate set_seeding_version(value), to: GlobalSetting

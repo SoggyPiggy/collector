@@ -6,7 +6,8 @@ defmodule Commands.Organiser do
     Command.Registry,
     Command.Collect,
     Command.Suggest,
-    Command.Changelog
+    Command.Changelog,
+    Command.Seed
   ]
 
   def commands_all(), do: @commands

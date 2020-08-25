@@ -45,4 +45,15 @@ defmodule Commands.Organiser do
       |> Enum.any?(fn command_module_alias -> command_module_alias == command_alias end)
     end)
   end
+
+  def get_appropriate_commands(nil), do: commands_unregistered()
+  def get_appropriate_commands(true), do: commands_registered()
+  def get_appropriate_commands(false), do: commands_unregistered()
+  def get_appropriate_commands(%Database.Repo.Account{} = account) do
+    account
+    |> Database.is_admin()
+    |> get_appropriate_commands()
+  end
+  def get_appropriate_commands(false, _account), do: commands_registered()
+  def get_appropriate_commands(true, _account), do: commands_admin()
 end

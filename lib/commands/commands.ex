@@ -10,4 +10,5 @@ defmodule Commands do
   defdelegate commands_all(), to: Organiser
   defdelegate commands_registered(), to: Organiser
   defdelegate commands_unregistered(), to: Organiser
+  defdelegate get_appropriate_commands(account), to: Organiser
 end

@@ -8,11 +8,24 @@ defmodule Database.Repo.Set do
     field :name, :string
     field :folder_dir, :string, default: "_default"
 
+    belongs_to :set, Database.Repo.Set
+    has_many :sets, Database.Repo.Set
     has_many :coins, Database.Repo.Coin
+  end
+
+  def create(set, params) do
+    %Database.Repo.Set{}
+    |> Database.add_association(set)
+    |> create_changeset_insert(params)
   end
 
   def create(params) do
     %Database.Repo.Set{}
+    |> create_changeset_insert(params)
+  end
+
+  def create_changeset_insert(set, params) do
+    set
     |> Changeset.cast(params, [:name, :folder_dir])
     |> Repo.insert()
   end

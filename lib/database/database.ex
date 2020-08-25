@@ -23,6 +23,7 @@ defmodule Database do
   defdelegate make_admin(settings), to: AccountSettings
 
   defdelegate create_set(params), to: Set, as: :create
+  defdelegate create_set(set, params), to: Set, as: :create
   defdelegate get_set_by_card(card), to: Set, as: :get_by_card
   defdelegate get_set_by_id(id), to: Set, as: :get_by_id
   defdelegate get_set_by_name(name), to: Set, as: :get_by_name

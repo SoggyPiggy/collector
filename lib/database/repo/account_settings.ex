@@ -26,7 +26,7 @@ defmodule Database.Repo.AccountSettings do
     {:ok, account_settings} = create(account)
     account_settings
   end
-  def create(account, params \\ {})
+  def create(account, params \\ %{})
   def create({:ok, account}, params), do: create(account, params)
   def create(account, params) do
     %Database.Repo.AccountSettings{}

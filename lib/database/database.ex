@@ -39,6 +39,7 @@ defmodule Database do
   defdelegate create_coin_instance(coin, condition), to: CoinInstance, as: :create
   defdelegate generate_coin_instance(coin), to: CoinInstance, as: :generate
   defdelegate generate_coin_instance(coin, params), to: CoinInstance, as: :generate
+  defdelegate get_coin_instance_grade(coin), to: CoinInstance, as: :get_grade
 
   defdelegate create_coin_transaction(coin_instance, account, params), to: CoinTransaction, as: :create
   defdelegate get_last_coin_transaction(account, reason), to: CoinTransaction, as: :get_last

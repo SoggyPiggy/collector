@@ -37,4 +37,20 @@ defmodule Database.Repo.CoinInstance do
   end
 
   defp process_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
+
+  def get_grade(coin_instance) do
+    coin_instance
+    |> Map.get(:condition)
+    |> case do
+      x when x > 0.95 -> "About Uncirculated"
+      x when x > 0.90 -> "Extremely Fine"
+      x when x > 0.75 -> "Very Fine"
+      x when x > 0.70 -> "Fine"
+      x when x > 0.50 -> "Very Good"
+      x when x > 0.25 -> "Good"
+      x when x > 0.20 -> "About Good"
+      x when x > 0.10 -> "Fair"
+      _ -> "Poor"
+    end
+  end
 end

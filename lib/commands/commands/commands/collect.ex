@@ -55,36 +55,13 @@ defmodule Commands.Command.Collect do
 
     %{
       content: """
-      <@#{account.discord_id}>
-      **Name**: #{data.coin.name}
-      **Grade**: #{data.coin_instance.condition |> get_condition_grade()}
-      **Condition**: #{data.coin_instance.condition |> friendlify_condition()}
+      <@#{account.discord_id}> collected
+      *#{Database.get_coin_instance_grade(data.coin_instance)}*
+      #{Database.get_set_name_structure(data.coin) |> Enum.join(" > ")} > **#{data.coin.name}**
       """,
       file: %{name: "#{data.coin.id}.png", body: coin_art}
     }
     |> Discord.send(:reply, message)
-  end
-
-  defp get_condition_grade(condition) do
-    condition
-    |> case do
-      x when x > 0.95 -> "About Uncirculated"
-      x when x > 0.90 -> "Extremely Fine"
-      x when x > 0.75 -> "Very Fine"
-      x when x > 0.70 -> "Fine"
-      x when x > 0.50 -> "Very Good"
-      x when x > 0.25 -> "Good"
-      x when x > 0.20 -> "About Good"
-      x when x > 0.10 -> "Fair"
-      _ -> "Poor"
-    end
-  end
-
-  defp friendlify_condition(float) do
-    (float * 100
-    |> Float.to_string()
-    |> String.slice(0..4))
-    <> "%"
   end
 
   defp get_coin_structs(coin_transaction) do

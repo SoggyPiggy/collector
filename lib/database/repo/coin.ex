@@ -66,8 +66,8 @@ defmodule Database.Repo.Coin do
     |> Path.join(coin.file_dir)
   end
 
-  def get_art_path_append_parent_dir(path, %{set_id: nil}), do: path
-  def get_art_path_append_parent_dir(path, child) do
+  defp get_art_path_append_parent_dir(path, %{set_id: nil}), do: path
+  defp get_art_path_append_parent_dir(path, child) do
     parent =
       child
       |> Repo.preload(:set)

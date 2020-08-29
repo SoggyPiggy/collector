@@ -77,4 +77,19 @@ defmodule Database.Repo.Coin do
     |> get_art_path_append_parent_dir(parent)
     |> Path.join(parent.folder_dir)
   end
+
+  def get_set_structure(child, tail \\ [])
+  def get_set_structure(%Database.Repo.Coin{} = coin, tail) do
+    coin
+    |> Repo.preload(:set)
+    |> Map.get(:set)
+    |> get_set_structure(tail)
+  end
+  def get_set_structure(%Database.Repo.Set{set_id: nil, name: name}, tail), do: [name | tail]
+  def get_set_structure(%Database.Repo.Set{name: name} = child, tail) do
+    child
+    |> Repo.preload(:set)
+    |> Map.get(:set)
+    |> get_set_structure([name | tail])
+  end
 end

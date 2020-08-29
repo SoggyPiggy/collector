@@ -34,6 +34,7 @@ defmodule Database do
   defdelegate select_random_coin(), to: Coin, as: :select_random
   defdelegate get_coin_art_path(coin), to: Coin, as: :get_art_path
   defdelegate get_coin_art_path(coin, file_extension), to: Coin, as: :get_art_path
+  defdelegate get_set_name_structure(child), to: Coin, as: :get_set_structure
 
   defdelegate create_coin_instance(coin, condition), to: CoinInstance, as: :create
   defdelegate generate_coin_instance(coin), to: CoinInstance, as: :generate

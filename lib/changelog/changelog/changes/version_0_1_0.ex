@@ -4,7 +4,7 @@ defmodule Changelog.Change.Version_0_1_0 do
     name: "The Rebirth",
     patches: [
       %Changelog.Patch{
-        version: "0",
+        version: "1",
         notes: [
           {"Whats New", [
             "Being the initial patch of the bot this is here to let you know the differences between the old and new bot.",
@@ -29,6 +29,12 @@ defmodule Changelog.Change.Version_0_1_0 do
             "Additional ways of collecting coins",
             "Visual indication of coin condition",
           ]}
+        ]
+      },
+      %Changelog.Patch{
+        version: "0",
+        notes: [
+          {"First Bulid", ["The first push to the server"]}
         ]
       }
     ]

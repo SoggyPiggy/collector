@@ -1,7 +1,7 @@
 defmodule Commands.Processor do
   def execute(input, {account, _reply_data} = data) do
     input
-    |> process_down_split()
+    |> String.split(" ", parts: 2)
     |> process_command_arguments(account)
     |> execute_command(data)
   end
@@ -12,23 +12,19 @@ defmodule Commands.Processor do
 
   defp process_command_arguments([command | arguments], account) do
     {
-      process_command(command, account),
+      command
+      |> String.downcase()
+      |> process_command(account),
       process_arguments(arguments)
     }
   end
 
-  defp process_arguments(arguments), do: arguments
+  defp process_arguments([]), do: ""
+  defp process_arguments([arguments]), do: arguments
 
   defp process_command(command, account) do
     account
     |> Commands.get_appropriate_commands()
     |> Commands.find(command)
-  end
-
-  defp process_down_split(input) do
-    input
-    |> String.downcase()
-    |> String.replace(~r/^>/, "")
-    |> OptionParser.split()
   end
 end

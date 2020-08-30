@@ -9,13 +9,14 @@ defmodule Commands.Command.Suggest do
 
   def module(), do: @command
 
+  def execute("", _), do: nil
   def execute(suggestion, {
     account,
     %{author: %{username: username, discriminator: discriminator}} = message
   }) do
     account
     |> Database.create_suggestion(%{
-      content: suggestion |> Enum.join(" "),
+      content: suggestion,
       discord_username: "#{username}##{discriminator}"
     })
     |> confirm_recording(message)

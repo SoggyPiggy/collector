@@ -8,6 +8,8 @@ defmodule Discord.Speaker do
     send_message(message, Nostrum.Api.create_dm!(id).id)
   def send(message, :direct, %Nostrum.Struct.User{id: id}), do:
     send_message(message, Nostrum.Api.create_dm!(id).id)
+  def send(message, id) when is_integer(id), do:
+    send_message(message, id)
 
   defp send_message(message, id), do: Nostrum.Api.create_message(id, message)
 end

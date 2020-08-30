@@ -35,6 +35,8 @@ defmodule Database.Repo.Utils do
     |> seed_data_run_files(path)
     |> seed_data_get_latest_version(version)
     |> Database.set_seeding_version()
+
+    :ok
   end
 
   defp seed_data_run_files([], _dir), do: []

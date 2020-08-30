@@ -14,6 +14,7 @@ defmodule Commands.Processor do
     {
       command
       |> String.downcase()
+      |> String.replace(~r/^>/, "")
       |> process_command(account),
       process_arguments(arguments)
     }

@@ -1,8 +1,6 @@
 defmodule Mix.Tasks.Collector.Seed do
   use Mix.Task
 
-  require Database
-
   @shortdoc "Runs the repository data-seeding"
 
   def run(_args) do

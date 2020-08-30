@@ -1,6 +1,6 @@
 defmodule Database.Repo.Utils do
 
-  @dialyzer {:nowarn_function, get_latest_version: 2}
+  @dialyzer {:nowarn_function, seed_data_get_latest_version: 2}
 
   def add_association(table, %{id: id} = associate) do
     table

@@ -8,7 +8,7 @@ defmodule Database.Repo.Coin do
     field :name, :string
     field :file_dir, :string, default: "_coin"
     field :in_circulation, :boolean, default: true
-    field :weight, :integer, autogenerate: {Enum, :random, [50..100]}
+    field :weight, :integer, autogenerate: {Enum, :random, [750..1000]}
 
     belongs_to :set, Database.Repo.Set
     has_many :coin_instances, Database.Repo.CoinInstance

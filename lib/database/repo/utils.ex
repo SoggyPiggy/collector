@@ -25,7 +25,7 @@ defmodule Database.Repo.Utils do
   end
 
   def seed_data() do
-    path = Path.join(File.cwd!, "priv/repo/seeds")
+    path = Path.join(File.cwd!, "seeds")
     unless File.dir?(path), do: File.mkdir_p!(path)
     version = Database.get_seeding_version()
     File.ls!(path)
@@ -51,7 +51,7 @@ defmodule Database.Repo.Utils do
   defp seed_data_get_latest_version([_ | [_ | _] = tail], version), do: seed_data_get_latest_version(tail, version)
 
   def seed_gen(name) do
-    path = Path.join(File.cwd!, "priv/repo/seeds")
+    path = Path.join(File.cwd!, "seeds")
     unless File.dir?(path), do: File.mkdir!(path)
     time = seed_gen_timestamp()
     file_suffix = "#{name |> String.replace(" ", "_") |> Macro.underscore()}.exs"

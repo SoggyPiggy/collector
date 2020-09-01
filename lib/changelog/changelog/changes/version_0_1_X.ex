@@ -1,4 +1,4 @@
-defmodule Changelog.Change.Version_0_1_0 do
+defmodule Changelog.Change.Version_0_1_X do
   @version %Changelog.MajorMinor{
     version: "0.1",
     name: "The Rebirth",

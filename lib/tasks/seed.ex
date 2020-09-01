@@ -5,6 +5,6 @@ defmodule Mix.Tasks.Collector.Seed do
 
   def run(_args) do
     {:ok, _} = Application.ensure_all_started(:collector)
-    Database.seed_data()
+    Database.update_seeds()
   end
 end

@@ -12,7 +12,7 @@ defmodule Commands.Command.Seed do
 
   def execute(_args, {_account, message}) do
     old_version = Database.get_seeding_version()
-    Database.seed_data()
+    Database.update_seeds()
     new_version = Database.get_seeding_version()
     """
     Database Seed Data has been updated

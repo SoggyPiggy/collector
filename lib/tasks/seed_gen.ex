@@ -7,6 +7,6 @@ defmodule Mix.Tasks.Collector.Seed.Gen do
   def run(args) do
     args
     |> Enum.join(" ")
-    |> Database.seed_gen()
+    |> Database.generate_seed()
   end
 end

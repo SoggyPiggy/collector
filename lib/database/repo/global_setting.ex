@@ -21,6 +21,12 @@ defmodule Database.Repo.GlobalSetting do
     |> get_setting(type, value)
     |> Changeset.cast(Map.put(%{}, type, value), @values)
     |> Repo.update()
+    |> extract(type)
+  end
+
+  defp extract({:ok, setting}, type) do
+    setting
+    |> Map.get(type)
   end
 
   defp get(key, type, default), do: get_setting(key, type, default) |> Map.fetch!(type)

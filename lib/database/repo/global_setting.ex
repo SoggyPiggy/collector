@@ -13,8 +13,8 @@ defmodule Database.Repo.GlobalSetting do
     field :float_value, :float
   end
 
-  def set_seeding_version(version), do: set("seeding_version", :string_value, version)
-  def get_seeding_version(), do: get("seeding_version", :string_value, "0")
+  def set_seeding_version(version), do: set("seeding_version", :integer_value, version)
+  def get_seeding_version(), do: get("seeding_version", :integer_value, 0)
 
   defp set(key, type, value) do
     key

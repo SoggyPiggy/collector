@@ -4,6 +4,17 @@ defmodule Changelog.Change.Version_0_1_X do
     name: "The Rebirth",
     patches: [
       %Changelog.Patch{
+        version: "2",
+        notes: [
+          {"Changed", [
+            "Added more aliases to patch notes command"
+          ]},
+          {"Fixed", [
+            "Fixed coin art loading problem causing the discord message to not appear. (Fixes what seems like the user never collected)"
+          ]}
+        ]
+      },
+      %Changelog.Patch{
         version: "1",
         notes: [
           {"Whats New", [

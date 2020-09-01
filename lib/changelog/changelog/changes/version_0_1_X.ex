@@ -21,8 +21,10 @@ defmodule Changelog.Change.Version_0_1_X do
             "Register command",
             "Collect command",
             "Suggest command",
-            "7 Sets",
-            "90 coins",
+            "8 Core Sets",
+            "10 Sub Sets",
+            "18 Sets in total",
+            "95 coins",
           ]},
           {"WIP Features", [
             "Ways to view obtained coins",

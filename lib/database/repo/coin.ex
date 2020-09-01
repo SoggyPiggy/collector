@@ -60,8 +60,7 @@ defmodule Database.Repo.Coin do
 
   def get_art_path(coin, ext), do: get_art_path(coin) <> ext
   def get_art_path(coin) do
-    File.cwd!()
-    |> Path.join("assets/static/images/coins")
+    "/images/coins"
     |> get_art_path_append_parent_dir(coin)
     |> Path.join(coin.file_dir)
   end

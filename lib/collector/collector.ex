@@ -1,9 +1,6 @@
 defmodule Collector do
-  @moduledoc """
-  Collector keeps the contexts that define your domain
-  and business logic.
+  alias Collector.CoinArt
 
-  Contexts are also responsible for managing your data, regardless
-  if it comes from the database, an external API or others.
-  """
+  defdelegate get_coin_url(coin), to: CoinArt, as: :get_coin_url
+  defdelegate get_coin_url(coin, extension), to: CoinArt, as: :get_coin_url
 end

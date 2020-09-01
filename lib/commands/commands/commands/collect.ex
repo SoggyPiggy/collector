@@ -1,4 +1,6 @@
 defmodule Commands.Command.Collect do
+  alias Nostrum.Struct.Embed
+
   @command %Commands.Command{
     id: :collect,
     title: "Collect",
@@ -43,24 +45,17 @@ defmodule Commands.Command.Collect do
   end
 
   defp send_reply({:ok, %{account: account, } = coin_transaction}, message) do
-    coin_art =
-      coin_transaction
-      |> Map.get(:coin_instance)
-      |> Map.get(:coin)
-      |> Database.get_coin_art_path(".png")
-      |> File.read!()
-    data =
-      coin_transaction
-      |> get_coin_structs()
-
-    %{
-      content: """
-      <@#{account.discord_id}> collected
-      *#{Database.get_coin_instance_grade(data.coin_instance)}*
-      #{Database.get_set_name_structure(data.coin) |> Enum.join(" > ")} > **#{data.coin.name}**
-      """,
-      file: %{name: "#{data.coin.id}.png", body: coin_art}
-    }
+    data = get_coin_structs(coin_transaction)
+    [
+      content: "<@#{account.discord_id}> collected",
+      # TODO: Add all the _coin.png's to the directories and add them to author url
+      embed:
+        %Embed{}
+        |> Embed.put_title(data.coin.name)
+        |> Embed.put_author(Database.get_set_name_structure(data.coin) |> Enum.join(" > "), nil, nil)
+        |> Embed.put_description("**Grade**: #{Database.get_coin_instance_grade(data.coin_instance)}")
+        |> Embed.put_image(Collector.get_coin_url(data.coin))
+    ]
     |> Discord.send(:reply, message)
   end
 

@@ -4,6 +4,14 @@ defmodule Changelog.Change.Version_0_1_X do
     name: "The Rebirth",
     patches: [
       %Changelog.Patch{
+        version: "3",
+        notes: [
+          {"Fixed", [
+            "Fixed directory references which caused some coins to not load"
+          ]}
+        ]
+      },
+      %Changelog.Patch{
         version: "2",
         notes: [
           {"Changed", [

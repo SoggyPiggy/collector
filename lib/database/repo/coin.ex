@@ -58,25 +58,6 @@ defmodule Database.Repo.Coin do
   defp select_random_search_validate(coins, _coin, rand_pos, cur_pos),
     do: select_random_search({coins, rand_pos}, cur_pos)
 
-  def get_art_path(coin, ext), do: get_art_path(coin) <> ext
-  def get_art_path(coin) do
-    "/images/coins"
-    |> get_art_path_append_parent_dir(coin)
-    |> Path.join(coin.file_dir)
-  end
-
-  defp get_art_path_append_parent_dir(path, %{set_id: nil}), do: path
-  defp get_art_path_append_parent_dir(path, child) do
-    parent =
-      child
-      |> Repo.preload(:set)
-      |> Map.get(:set)
-
-    path
-    |> get_art_path_append_parent_dir(parent)
-    |> Path.join(parent.folder_dir)
-  end
-
   def get_set_structure(child, tail \\ [])
   def get_set_structure(%Database.Repo.Coin{} = coin, tail) do
     coin

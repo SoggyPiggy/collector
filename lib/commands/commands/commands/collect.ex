@@ -54,7 +54,7 @@ defmodule Commands.Command.Collect do
         |> Embed.put_title(data.coin.name)
         |> Embed.put_author(Database.get_set_name_structure(data.coin) |> Enum.join(" > "), nil, nil)
         |> Embed.put_description("**Grade**: #{Database.get_coin_instance_grade(data.coin_instance)}")
-        |> Embed.put_image(Collector.get_coin_url(data.coin))
+        |> Embed.put_image(Collector.get_asset_url(data.coin))
     ]
     |> Discord.send(:reply, message)
   end

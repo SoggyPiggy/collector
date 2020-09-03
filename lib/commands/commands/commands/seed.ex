@@ -11,9 +11,8 @@ defmodule Commands.Command.Seed do
   def module(), do: @command
 
   def execute(_args, {_account, message}) do
-    old_version = Database.get_seeding_version()
-    Database.update_seeds()
-    new_version = Database.get_seeding_version()
+    old_version = Database.get_global("seeding_version", :integer_value, 0)
+    {:ok, new_version} = Database.update_seeds()
     """
     Database Seed Data has been updated
     #{old_version} ==> #{new_version}

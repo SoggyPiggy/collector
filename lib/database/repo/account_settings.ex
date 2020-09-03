@@ -4,6 +4,12 @@ defmodule Database.Repo.AccountSettings do
   require Query
   use Ecto.Schema
 
+  @modifiables [
+    :admin,
+    :admin_enabled,
+    :discordia_is_invited_tech_demo
+  ]
+
   schema "account_settings" do
     field :send_notifications, :boolean, default: true
     field :admin, :boolean, default: false
@@ -37,6 +43,12 @@ defmodule Database.Repo.AccountSettings do
     |> Changeset.cast(params, [])
     |> Changeset.unique_constraint(:account_id)
     |> Repo.insert()
+  end
+
+  def modify(account, params) do
+    account
+    |> Ecto.Changeset.cast(params, @modifiables)
+    |> Database.Repo.update()
   end
 
   def is_admin(nil), do: false

@@ -44,4 +44,7 @@ defmodule Database.Seeding.Updater do
 
   defp update_database_version(:no_change), do: {:ok, Database.get_seeding_version()}
   defp update_database_version({:ok, version}), do: {:ok, Database.set_seeding_version(version)}
+
+  defp get_seeding_version(), do: Database.get_global("seeding_version", :integer_value, 0)
+  defp et_seeding_veriosn(version), do: Database.set_global("seeding_version", :integer_value, version)
 end

@@ -13,10 +13,7 @@ defmodule Database.Repo.GlobalSetting do
     field :float_value, :float
   end
 
-  def set_seeding_version(version), do: set("seeding_version", :integer_value, version)
-  def get_seeding_version(), do: get("seeding_version", :integer_value, 0)
-
-  defp set(key, type, value) do
+  def set(key, type, value) do
     key
     |> get_setting(type, value)
     |> Changeset.cast(Map.put(%{}, type, value), @values)
@@ -24,12 +21,12 @@ defmodule Database.Repo.GlobalSetting do
     |> extract(type)
   end
 
+  def get(key, type, default), do: get_setting(key, type, default) |> Map.fetch!(type)
+
   defp extract({:ok, setting}, type) do
     setting
     |> Map.get(type)
   end
-
-  defp get(key, type, default), do: get_setting(key, type, default) |> Map.fetch!(type)
 
   defp get_setting(key, type, default) do
     Database.Repo.GlobalSetting

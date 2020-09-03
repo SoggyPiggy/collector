@@ -18,6 +18,7 @@ defmodule Database do
 
   defdelegate create_account_settings(account), to: AccountSettings, as: :create
   defdelegate get_account_settings(account), to: AccountSettings, as: :get
+  defdelegate modify_account_settings(settings, params), to: AccountSettings, as: :modify
   defdelegate is_admin(settings), to: AccountSettings
   defdelegate has_admin_override(settings), to: AccountSettings
   defdelegate toggle_admin(settings), to: AccountSettings
@@ -49,8 +50,8 @@ defmodule Database do
 
   defdelegate add_association(table, association), to: Utils
 
-  defdelegate get_seeding_version(), to: GlobalSetting
-  defdelegate set_seeding_version(value), to: GlobalSetting
+  defdelegate get_global(key, value_type, default), to: GlobalSetting, as: :get
+  defdelegate set_global(key, value_type, value), to: GlobalSetting, as: :set
 
   defdelegate generate_seed(name), to: Seeding.Generator, as: :new
   defdelegate update_seeds(), to: Seeding.Updater, as: :update

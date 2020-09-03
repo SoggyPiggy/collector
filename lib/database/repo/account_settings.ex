@@ -9,6 +9,9 @@ defmodule Database.Repo.AccountSettings do
     field :admin, :boolean, default: false
     field :admin_enabled, :boolean, default: false
 
+    # Discordia
+    field :discordia_is_invited_tech_demo, :boolean, default: false
+
     belongs_to :account, Database.Repo.Account
   end
 

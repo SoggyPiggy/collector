@@ -38,6 +38,7 @@ defmodule Database do
     defdelegate new(item), to: Repo.CoinInstance
     defdelegate new(item, params), to: Repo.CoinInstance
     defdelegate get(item), to: Repo.CoinInstance
+    defdelegate modify(item, params), to: Repo.CoinInstance
     defdelegate generate(item), to: Repo.CoinInstance
     defdelegate generate(item, options), to: Repo.CoinInstance
     defdelegate grade(item), to: Repo.CoinInstance

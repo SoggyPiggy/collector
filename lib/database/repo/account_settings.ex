@@ -25,6 +25,7 @@ defmodule Database.Repo.AccountSettings do
   def new(%Database.Repo.Account{} = account) do
     %Database.Repo.AccountSettings{}
     |> Database.add_association(account)
+    |> Changeset.cast(%{}, @modifiables)
     |> Changeset.unique_constraint(:account_id)
     |> Repo.insert()
   end
@@ -87,7 +88,6 @@ defmodule Database.Repo.AccountSettings do
   def toggle(value, settings, key) when is_boolean(value) do
     settings
     |> get()
-    |> Changeset.cast(Map.put(%{}, key, !value), @modifiables)
-    |> Database.Repo.update()
+    |> modify(Map.put(%{}, key, !value))
   end
 end

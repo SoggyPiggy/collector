@@ -45,7 +45,7 @@ defmodule Commands.Organiser do
   def get_appropriate_commands(false), do: commands_unregistered()
   def get_appropriate_commands(%Database.Repo.Account{} = account) do
     account
-    |> Database.is_admin()
+    |> Database.AccountSettings.fetch(:admin)
     |> get_appropriate_commands(account)
   end
   def get_appropriate_commands(false, _account), do: commands_registered()

@@ -22,7 +22,7 @@ defmodule LandOfDiscordia.TechDemo do
   defp check_account({:error, _reason} = error), do: error
   defp check_account({:ok, account}) do
     account
-    |> Database.get_account_settings()
+    |> Database.AccountSettings.get()
     |> Map.get(:discordia_is_invited_tech_demo)
     |> check_account_verify(account)
   end
@@ -57,8 +57,8 @@ defmodule LandOfDiscordia.TechDemo do
   defp update_account(account) do
     {:ok, _settings} =
       account
-      |> Database.get_account_settings()
-      |> Database.modify_account_settings(%{discordia_is_invited_tech_demo: true})
+      |> Database.AccountSettings.get()
+      |> Database.AccountSettings.modify(%{discordia_is_invited_tech_demo: true})
 
     account
   end

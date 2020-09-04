@@ -12,6 +12,9 @@ defmodule Database.Repo.Utils do
     )
   end
 
+  def preload({:ok, table}, association), do: preload(table, association)
+  def preload(table, association), do: Database.Repo.preload(table, association)
+
   defp process_associate(associate, replacement) do
     associate
     |> Map.get(:__meta__)

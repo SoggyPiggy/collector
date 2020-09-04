@@ -4,6 +4,13 @@ defmodule Database.Repo.Coin do
   require Query
   use Ecto.Schema
 
+  @modifiable [
+    :name,
+    :file_dir,
+    :in_circulation,
+    :weight
+  ]
+
   schema "coins" do
     field :name, :string
     field :file_dir, :string, default: "_coin"
@@ -14,62 +21,65 @@ defmodule Database.Repo.Coin do
     has_many :coin_instances, Database.Repo.CoinInstance
   end
 
-  def create({:ok, set}, params), do: create(set, params)
-  def create(set, params) do
+  def new({:ok, item}, params), do: new(item, params)
+  def new(item, params) when is_list(params), do: Enum.each(params, fn param -> new(item, param) end)
+  def new(%Database.Repo.Set{} = set, params) do
     %Database.Repo.Coin{}
     |> Database.add_association(set)
-    |> Changeset.cast(params, [:name, :file_dir, :in_circulation, :weight])
+    |> Changeset.cast(params, @modifiable)
     |> Repo.insert()
   end
-
-  def update(coin, params) do
-    coin
-    |> Changeset.cast(params, [:name, :file_dir, :in_circulation])
-    |> Repo.update()
+  def new(item, params) do
+    item
+    |> Database.Set.get()
+    |> new(params)
   end
 
-  def get_by_id(id) do
+  def get({:ok, item}), do: get(item)
+  def get(%Database.Repo.Coin{} = coin), do: coin
+  def get(%Database.Repo.CoinInstance{} = coin_instance) do
+    coin_instance
+    |> Database.preload(:coin)
+    |> Map.get(:coin)
+  end
+  def get(%Database.Repo.CoinTransaction{} = coin_transaction) do
+    coin_transaction
+    |> Database.CoinInstance.get()
+    |> get()
+  end
+  def get(id) when is_integer(id) do
     Database.Repo.Coin
-    |> Query.where(id: ^id)
-    |> Repo.one()
+    |> Database.Repo.get(id)
   end
-
-  def get_by_name(name) do
+  def get(name) when is_bitstring(name) do
     Database.Repo.Coin
     |> Query.where(name: ^name)
     |> Repo.one()
   end
 
-  def select_random() do
+  def modify({:ok, item}, params), do: modify(item, params)
+  def modify(coin, params) do
+    coin
+    |> get()
+    |> Changeset.cast(params, @modifiable)
+    |> Repo.update()
+  end
+
+  def random() do
     Database.Repo.Coin
     |> Query.where(in_circulation: true)
     |> Query.order_by(desc: :weight)
-    |> select_random_process_query()
-    |> select_random_get_position()
-    |> select_random_search()
+    |> random_process_query()
+    |> random_get_position()
+    |> random_search()
   end
 
-  defp select_random_process_query(query), do: {Repo.all(query), Repo.aggregate(query, :sum, :weight)}
-  defp select_random_get_position({coins, total}), do: {coins, Enum.random(0..total)}
-  defp select_random_search({[coin | tail], rand_pos}, cur_pos \\ 0),
-    do: select_random_search_validate(tail, coin, rand_pos, cur_pos + coin.weight)
-  defp select_random_search_validate([], coin, _rand_pos, _cur_pos), do: coin
-  defp select_random_search_validate(_coins, coin, rand_pos, cur_pos) when cur_pos >= rand_pos, do: coin
-  defp select_random_search_validate(coins, _coin, rand_pos, cur_pos),
-    do: select_random_search({coins, rand_pos}, cur_pos)
-
-  def get_set_structure(child, tail \\ [])
-  def get_set_structure(%Database.Repo.Coin{} = coin, tail) do
-    coin
-    |> Repo.preload(:set)
-    |> Map.get(:set)
-    |> get_set_structure(tail)
-  end
-  def get_set_structure(%Database.Repo.Set{set_id: nil, name: name}, tail), do: [name | tail]
-  def get_set_structure(%Database.Repo.Set{name: name} = child, tail) do
-    child
-    |> Repo.preload(:set)
-    |> Map.get(:set)
-    |> get_set_structure([name | tail])
-  end
+  defp random_process_query(query), do: {Repo.all(query), Repo.aggregate(query, :sum, :weight)}
+  defp random_get_position({coins, total}), do: {coins, Enum.random(0..total)}
+  defp random_search({[coin | tail], rand_pos}, cur_pos \\ 0),
+    do: random_search_validate(tail, coin, rand_pos, cur_pos + coin.weight)
+  defp random_search_validate([], coin, _rand_pos, _cur_pos), do: coin
+  defp random_search_validate(_coins, coin, rand_pos, cur_pos) when cur_pos >= rand_pos, do: coin
+  defp random_search_validate(coins, _coin, rand_pos, cur_pos),
+    do: random_search({coins, rand_pos}, cur_pos)
 end

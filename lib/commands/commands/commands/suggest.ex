@@ -10,15 +10,9 @@ defmodule Commands.Command.Suggest do
   def module(), do: @command
 
   def execute("", _), do: nil
-  def execute(suggestion, {
-    account,
-    %{author: %{username: username, discriminator: discriminator}} = message
-  }) do
+  def execute(suggestion, {account, %{author: author} = message}) do
     account
-    |> Database.create_suggestion(%{
-      content: suggestion,
-      discord_username: "#{username}##{discriminator}"
-    })
+    |> Database.Suggestion.new("#{author.username}##{author.discriminator}", suggestion)
     |> confirm_recording(message)
   end
 

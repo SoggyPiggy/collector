@@ -14,7 +14,8 @@ defmodule Database.Repo.Account do
     timestamps([type: :utc_datetime])
   end
 
-  def create(%{id: id}) do
+  def new(%Nostrum.Struct.User{id: id}), do: new(id)
+  def new(id) when is_integer(id) do
     %Database.Repo.Account{}
     |> Changeset.cast(%{discord_id: id}, [:discord_id])
     |> Changeset.validate_required([:discord_id])
@@ -22,8 +23,21 @@ defmodule Database.Repo.Account do
     |> Repo.insert()
   end
 
-  def get_by_discord_user(%{id: id}), do: get_by_discord_id(id)
-  def get_by_discord_id(id) do
+  def get({:ok, item}), do: get(item)
+  def get(%Nostrum.Struct.Message{author: %{id: id}}), do: get(id)
+  def get(%Nostrum.Struct.User{id: id}), do: get(id)
+  def get(%Database.Repo.Account{} = account), do: account
+  def get(%Database.Repo.CoinTransaction{} = coin_transaction) do
+    coin_transaction
+    |> Database.preload(:account)
+    |> Map.get(:account)
+  end
+  def get(%Database.Repo.Suggestion{} = suggestion) do
+    suggestion
+    |> Database.preload(:account)
+    |> Map.get(:account)
+  end
+  def get(id) when is_integer(id) do
     Database.Repo.Account
     |> Query.where(discord_id: ^id)
     |> Repo.one()

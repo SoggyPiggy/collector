@@ -1,6 +1,8 @@
 defmodule Collector do
-  alias Collector.CoinArt
+  alias Collector.Assets
 
-  defdelegate get_coin_url(coin), to: CoinArt, as: :get_coin_url
-  defdelegate get_coin_url(coin, extension), to: CoinArt, as: :get_coin_url
+  defdelegate get_asset(item), to: Assets
+  defdelegate get_asset(item, file_suffix), to: Assets
+  defdelegate get_asset_url(item), to: Assets
+  defdelegate get_asset_url(item, file_suffix), to: Assets
 end

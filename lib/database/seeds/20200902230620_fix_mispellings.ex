@@ -1,27 +1,23 @@
 defmodule Database.Seeds.FixMispellings20200902230620 do
-  import Database
+  alias Database.Coin
 
   def version(), do: 20200902230620
 
   def run() do
     "Spotted Blue Eye"
-    |> get_coin_by_name()
-    |> Ecto.Changeset.cast(%{file_dir: "gertrudes-rainbow"}, [:file_dir])
-    |> Database.Repo.update!()
+    |> Coin.get()
+    |> Coin.modify(%{file_dir: "gertrudes-rainbow"})
 
     "Burmese Dwarf Stickleback"
-    |> get_coin_by_name()
-    |> Ecto.Changeset.cast(%{file_dir: "paradoxus-toothpick"}, [:file_dir])
-    |> Database.Repo.update!()
+    |> Coin.get()
+		|> Coin.modify(%{file_dir: "paradoxus-toothpick"})
 
     "Scarlet Badis"
-    |> get_coin_by_name()
-    |> Ecto.Changeset.cast(%{file_dir: "scarlet-badis"}, [:file_dir])
-    |> Database.Repo.update!()
+    |> Coin.get()
+		|> Coin.modify(%{file_dir: "scarlet-badis"})
 
     "Woodstock '69"
-    |> get_coin_by_name()
-    |> Ecto.Changeset.cast(%{file_dir: "woodstock"}, [:file_dir])
-    |> Database.Repo.update!()
+    |> Coin.get()
+		|> Coin.modify(%{file_dir: "woodstock"})
   end
 end

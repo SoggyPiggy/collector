@@ -29,7 +29,7 @@ defmodule Discord.Consumer do
     |> Tuple.append(message)
   end
 
-  defp get_account(author), do: {Database.get_account_by_discord_user(author)}
+  defp get_account(author), do: {Database.Account.get(author)}
 
   defp pass_to_commands({:error, _reason} = error, _input), do: error
   defp pass_to_commands(data, input), do: Commands.execute(input, data)

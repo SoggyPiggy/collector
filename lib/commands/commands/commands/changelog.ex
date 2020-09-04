@@ -19,8 +19,8 @@ defmodule Commands.Command.Changelog do
 
   defp send_message(content, {account, message}) do
     account
-    |> Database.get_account_settings()
-    |> Database.has_admin_override()
+    |> Database.AccountSettings.get()
+    |> Database.AccountSettings.all?([:admin, :admin_enabled])
     |> direct_send(content, message)
   end
   defp direct_send(true, content, message), do: Discord.send(content, :reply, message)

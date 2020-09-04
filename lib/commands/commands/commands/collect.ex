@@ -19,9 +19,9 @@ defmodule Commands.Command.Collect do
   end
 
   defp collect(:lt, {account, message}) do
-    Database.select_random_coin()
-    |> Database.generate_coin_instance()
-    |> Database.create_coin_transaction(account, %{reason: "collect"})
+    Database.Coin.random()
+    |> Database.CoinInstance.generate()
+    |> Database.CoinTransaction.new(account, "collect")
     |> send_reply(message)
   end
   defp collect(_, {%{discord_id: id}, message}) do
@@ -34,7 +34,7 @@ defmodule Commands.Command.Collect do
 
   defp get_last_collect(account) do
     account
-    |> Database.get_last_coin_transaction("collect")
+    |> Database.CoinTransaction.last("collect")
   end
 
   defp compare_dates(nil), do: :lt
@@ -52,8 +52,8 @@ defmodule Commands.Command.Collect do
       embed:
         %Embed{}
         |> Embed.put_title(data.coin.name)
-        |> Embed.put_author(Database.get_set_name_structure(data.coin) |> Enum.join(" > "), nil, nil)
-        |> Embed.put_description("**Grade**: #{Database.get_coin_instance_grade(data.coin_instance)}")
+        |> Embed.put_author(Database.Set.structure(data.coin, :name) |> Enum.join(" > "), nil, nil)
+        |> Embed.put_description("**Grade**: #{Database.CoinInstance.grade(data.coin_instance)}")
         |> Embed.put_image(Collector.get_asset_url(data.coin))
     ]
     |> Discord.send(:reply, message)

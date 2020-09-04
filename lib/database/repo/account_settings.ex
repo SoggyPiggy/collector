@@ -21,75 +21,73 @@ defmodule Database.Repo.AccountSettings do
     belongs_to :account, Database.Repo.Account
   end
 
-  def get(%Database.Repo.Account{id: id} = account) do
-    Database.Repo.AccountSettings
-    |> Query.where(account_id: ^id)
-    |> Repo.one()
-    |> case do
-      nil -> create!(account)
-      settings -> settings
-    end
-  end
-
-  def create!(account) do
-    {:ok, account_settings} = create(account)
-    account_settings
-  end
-  def create(account, params \\ %{})
-  def create({:ok, account}, params), do: create(account, params)
-  def create(account, params) do
+  def new({:ok, item}), do: new(item)
+  def new(%Database.Repo.Account{} = account) do
     %Database.Repo.AccountSettings{}
     |> Database.add_association(account)
-    |> Changeset.cast(params, [])
     |> Changeset.unique_constraint(:account_id)
     |> Repo.insert()
   end
+  def new(item) do
+    item
+    |> Database.Account.get()
+    |> new()
+  end
 
-  def modify(account, params) do
+  def get({:ok, item}), do: get(item)
+  def get(%Database.Repo.AccountSettings{} = settings), do: settings
+  def get(%Database.Repo.Account{} = account) do
     account
+    |> Database.preload(:account_settings)
+    |> Map.get(:account_settings)
+    |> case do
+      nil -> new(account)
+      settings -> settings
+    end
+  end
+  def get(item) do
+    item
+    |> Database.Account.get()
+    |> get()
+  end
+
+  def modify({:ok, item}, params), do: modify(item, params)
+  def modify(settings, params) do
+    settings
+    |> get()
     |> Ecto.Changeset.cast(params, @modifiables)
     |> Database.Repo.update()
   end
 
-  def is_admin(nil), do: false
-  def is_admin(settings) do
+  def fetch({:ok, item}, key), do: fetch(item, key)
+  def fetch(settings, keys) when is_list(keys),
+    do: Enum.map(keys, fn key -> fetch(settings, key) end)
+  def fetch(%Database.Repo.AccountSettings{} = settings, key) when is_atom(key), do: Map.get(settings, key)
+  def fetch(settings, key) do
     settings
-    |> ensure_settings()
-    |> Map.get(:admin, false)
+    |> get()
+    |> fetch(key)
   end
 
-  def has_admin_override(nil), do: false
-  def has_admin_override(%Database.Repo.Account{} = account) do
-    account
-    |> Database.get_account_settings()
-    |> has_admin_override()
-  end
-  def has_admin_override(%Database.Repo.AccountSettings{admin: admin, admin_enabled: is_enabled}),
-    do: admin && is_enabled
+  def all?({:ok, item}, keys), do: all?(item, keys)
+  def all?(settings, keys) when is_list(keys), do: fetch(settings, keys) |> Enum.all?()
 
-  def make_admin(nil), do: {:error, "can not create admin from nil"}
-  def make_admin(settings) do
+  def any?({:ok, item}, keys), do: all?(item, keys)
+  def any?(settings, keys) when is_list(keys), do: fetch(settings, keys) |> Enum.any?()
+
+  def toggle(item, key, value \\ nil)
+  def toggle({:ok, item}, key, value), do: toggle(item, key, value)
+  def toggle(settings, key, value) when is_boolean(value), do: toggle(value, settings, key)
+  def toggle(settings, key, nil) do
     settings
-    |> ensure_settings()
-    |> Changeset.cast(%{admin: true}, [:admin])
-    |> Repo.update()
+    |> get()
+    |> Map.get(key)
+    |> toggle(settings, key)
   end
-
-
-  def toggle_admin({current, settings}) do
+  def toggle(value, settings, key) when is_boolean(value) do
     settings
-    |> ensure_settings()
-    |> Map.put(:admin_enabled, current)
-    |> Changeset.cast(%{admin_enabled: !current}, [:admin_enabled])
-    |> Repo.update()
+    |> get()
+    |> Changeset.cast(Map.put(%{}, key, !value), @modifiables)
+    |> Database.Repo.update()
   end
-  def toggle_admin(settings) do
-    settings
-    |> ensure_settings()
-    |> Map.pop(:admin_enabled)
-    |> toggle_admin()
-  end
-
-  defp ensure_settings(%Database.Repo.AccountSettings{} = settings), do: settings
-  defp ensure_settings(%Database.Repo.Account{} = account), do: Database.get_account_settings(account)
 end

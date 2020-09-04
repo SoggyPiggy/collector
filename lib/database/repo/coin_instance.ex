@@ -13,33 +13,54 @@ defmodule Database.Repo.CoinInstance do
     timestamps([type: :utc_datetime])
   end
 
-  def create({:ok, coin}, params), do: create(coin, params)
-  def create(coin, params) do
+  def new(item, params \\ %{})
+  def new({:ok, item}, params), do: new(item, params)
+  def new(%Database.Repo.Coin{} = coin, params) do
     %Database.Repo.CoinInstance{}
     |> Database.add_association(coin)
     |> Changeset.cast(params, [:condition])
     |> Changeset.validate_required([:condition])
     |> Repo.insert()
   end
+  def new(coin, params) do
+    coin
+    |> Database.Coin.get()
+    |> new(params)
+  end
 
-  def generate(coin, params \\ %{})
-  def generate({:ok, coin}, params), do: generate(coin, params)
+  def get({:ok, item}), do: get(item)
+  def get(%Database.Repo.CoinInstance{} = coin_instance), do: coin_instance
+  def get(%Database.Repo.CoinTransaction{} = coin_transaction) do
+    coin_transaction
+    |> Database.preload(:coin_instance)
+    |> Map.get(:coin_instance)
+  end
+  def get(id) when is_integer(id) do
+    Database.Repo.CoinInstance
+    |> Database.Repo.get(id)
+  end
+
+  def generate(item, params \\ %{})
+  def generate({:ok, item}, params), do: generate(item, params)
   def generate(coin, params) do
     coin
-    |> create(%{condition:
+    |> Database.Coin.get()
+    |> new(%{condition:
       Map.get(params, :seeder, &:rand.uniform/0).()
       |> fn value -> value * Map.get(params, :pre_multiplier, 1) end.()
       |> fn value -> value + Map.get(params, :pre_addition, 0) end.()
-      |> Map.get(params, :processor, &process_condition/1).()
+      |> Map.get(params, :processor, &generate_condition/1).()
       |> fn value -> value * Map.get(params, :post_multiplier, 1) end.()
       |> fn value -> value + Map.get(params, :post_addition, 0) end.()
     })
   end
 
-  defp process_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
+  defp generate_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
 
-  def get_grade(coin_instance) do
+  def grade({:ok, item}), do: grade(item)
+  def grade(coin_instance) do
     coin_instance
+    |> get()
     |> Map.get(:condition)
     |> case do
       x when x > 0.95 -> "About Uncirculated"

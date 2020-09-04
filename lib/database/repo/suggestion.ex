@@ -40,7 +40,7 @@ defmodule Database.Repo.Suggestion do
     |> get()
   end
 
-  def referance(suggestion) do
+  def reference(suggestion) do
     suggestion
     |> get()
     |> Map.get(:id)

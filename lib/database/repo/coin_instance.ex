@@ -39,6 +39,11 @@ defmodule Database.Repo.CoinInstance do
     Database.Repo.CoinInstance
     |> Database.Repo.get(id)
   end
+  def get(id) when is_bitstring(id) do
+    id
+    |> String.to_integer(36)
+    |> get()
+  end
 
   def generate(item, params \\ %{})
   def generate({:ok, item}, params), do: generate(item, params)
@@ -56,6 +61,15 @@ defmodule Database.Repo.CoinInstance do
   end
 
   defp generate_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
+
+  def reference({:ok, item}), do: reference(item)
+  def reference(coin_instance) do
+    coin_instance
+    |> get()
+    |> Map.get(:id)
+    |> Integer.to_string(36)
+    |> String.pad_leading(4, "0")
+  end
 
   def grade({:ok, item}), do: grade(item)
   def grade(coin_instance) do

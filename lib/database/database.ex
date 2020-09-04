@@ -56,6 +56,7 @@ defmodule Database do
     defdelegate new(item, username, content), to: Repo.Suggestion
     defdelegate new(item, params), to: Repo.Suggestion
     defdelegate get(item), to: Repo.Suggestion
+    defdelegate reference(item), to: Repo.Suggestion
   end
 
   defdelegate add_association(table, association), to: Repo.Utils

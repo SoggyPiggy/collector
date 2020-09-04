@@ -1,4 +1,6 @@
 defmodule Commands.Command.Suggest do
+  alias Database.Suggestion
+
   @command %Commands.Command{
     id: :suggest,
     title: "Suggest",
@@ -12,22 +14,16 @@ defmodule Commands.Command.Suggest do
   def execute("", _), do: nil
   def execute(suggestion, {account, %{author: author} = message}) do
     account
-    |> Database.Suggestion.new("#{author.username}##{author.discriminator}", suggestion)
+    |> Suggestion.new("#{author.username}##{author.discriminator}", suggestion)
     |> confirm_recording(message)
   end
 
   defp confirm_recording({:ok, suggestion}, message) do
     """
-    Suggestion has been recorded. `#{format_id(suggestion.id)}`
+    Suggestion has been recorded. `#{Suggestion.reference(suggestion)}`
     **"**#{format_content(suggestion.content)}**"**
     """
     |> Discord.send(:reply, message)
-  end
-
-  defp format_id(id) do
-    id
-    |> Integer.to_string()
-    |> String.pad_leading(3, "0")
   end
 
   defp format_content(content) do

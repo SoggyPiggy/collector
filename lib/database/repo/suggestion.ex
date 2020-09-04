@@ -30,14 +30,22 @@ defmodule Database.Repo.Suggestion do
     |> Database.preload(:suggestions)
     |> Map.get(:suggestions)
   end
-  def get(username) when is_bitstring(username) do
-    Database.Repo.Suggestion
-    |> Query.where(discord_username: ^username)
-    |> Repo.all()
-  end
   def get(id) when is_integer(id) do
     Database.Repo.Suggestion
     |> Database.Repo.get(id)
+  end
+  def get(id) when is_bitstring(id) do
+    id
+    |> String.to_integer(36)
+    |> get()
+  end
+
+  def referance(suggestion) do
+    suggestion
+    |> get()
+    |> Map.get(:id)
+    |> Integer.to_string(36)
+    |> String.pad_leading(2, "0")
   end
 
   # TODO: needs more touching up

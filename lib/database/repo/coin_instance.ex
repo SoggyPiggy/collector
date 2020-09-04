@@ -4,6 +4,11 @@ defmodule Database.Repo.CoinInstance do
   require Query
   use Ecto.Schema
 
+  @modifiables [
+    :condition,
+    :account_id
+  ]
+
   schema "coin_instances" do
     field :condition, :float
 
@@ -18,7 +23,7 @@ defmodule Database.Repo.CoinInstance do
   def new(%Database.Repo.Coin{} = coin, params) do
     %Database.Repo.CoinInstance{}
     |> Database.add_association(coin)
-    |> Changeset.cast(params, [:condition])
+    |> Changeset.cast(params, @modifiables)
     |> Changeset.validate_required([:condition])
     |> Repo.insert()
   end
@@ -61,6 +66,16 @@ defmodule Database.Repo.CoinInstance do
   end
 
   defp generate_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
+
+  def modify(item, params \\ %{})
+  def modify({:ok, item}, params), do: modify(item, params)
+  def modify(coin_instance, params) do
+    coin_instance
+    |> get()
+    |> Changeset.cast(params, @modifiables)
+    |> Changeset.validate_required([:condition])
+    |> Database.Repo.update()
+  end
 
   def reference({:ok, item}), do: reference(item)
   def reference(coin_instance) do

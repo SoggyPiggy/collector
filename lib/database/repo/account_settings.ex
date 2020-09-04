@@ -78,7 +78,7 @@ defmodule Database.Repo.AccountSettings do
 
   def toggle(item, key, value \\ nil)
   def toggle({:ok, item}, key, value), do: toggle(item, key, value)
-  def toggle(settings, key, value) when is_boolean(value), do: toggle(value, settings, key)
+  def toggle(settings, key, value) when is_boolean(value), do: toggle(!value, settings, key)
   def toggle(settings, key, nil) do
     settings
     |> get()

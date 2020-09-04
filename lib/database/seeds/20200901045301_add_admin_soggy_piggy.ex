@@ -10,6 +10,7 @@ defmodule Database.Seeds.AddAdminSoggyPiggy20200901045301 do
 
     Account.get(id)
     |> AccountSettings.get()
-    |> AccountSettings.toggle([:admin, :admin_enabled], true)
+    |> AccountSettings.toggle(:admin, true)
+    |> AccountSettings.toggle(:admin_enabled, true)
   end
 end

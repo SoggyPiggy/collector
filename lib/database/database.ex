@@ -42,6 +42,8 @@ defmodule Database do
     defdelegate generate(item), to: Repo.CoinInstance
     defdelegate generate(item, options), to: Repo.CoinInstance
     defdelegate grade(item), to: Repo.CoinInstance
+    defdelegate owned?(item), to: Repo.CoinInstance
+    defdelegate owner(item, owner), to: Repo.CoinInstance
   end
 
   defmodule CoinTransaction do

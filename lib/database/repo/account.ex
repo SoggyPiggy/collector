@@ -8,6 +8,7 @@ defmodule Database.Repo.Account do
     field :discord_id, :integer
 
     has_one :account_settings, Database.Repo.AccountSettings
+    has_many :coin_instances, Database.Repo.CoinInstance
     has_many :coin_transactions, Database.Repo.CoinTransaction
     has_many :suggestions, Database.Repo.Suggestion
 
@@ -27,6 +28,11 @@ defmodule Database.Repo.Account do
   def get(%Nostrum.Struct.Message{author: %{id: id}}), do: get(id)
   def get(%Nostrum.Struct.User{id: id}), do: get(id)
   def get(%Database.Repo.Account{} = account), do: account
+  def get(%Database.Repo.CoinInstance{} = coin_instance) do
+    coin_instance
+    |> Database.preload(:account)
+    |> Map.get(:account)
+  end
   def get(%Database.Repo.CoinTransaction{} = coin_transaction) do
     coin_transaction
     |> Database.preload(:account)

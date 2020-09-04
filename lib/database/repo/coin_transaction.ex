@@ -30,6 +30,7 @@ defmodule Database.Repo.CoinTransaction do
     |> Changeset.validate_required([:reason, :account_id, :coin_instance_id])
     |> Changeset.validate_inclusion(:reason, @transaction_reasons)
     |> Repo.insert()
+    |> new_adjust_instance(coin_instance, account)
   end
   def new(coin_instance, account, reason),
     do: new(
@@ -39,6 +40,16 @@ defmodule Database.Repo.CoinTransaction do
       |> Database.Account.get(),
       reason
     )
+
+  defp new_adjust_instance({:ok, item}, coin_instance, account), do: new_adjust_instance(item, coin_instance, account)
+  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: 1}, coin_instance, account) do
+    coin_instance
+    |> Database.CoinInstance.modify(%{account_id: account.id})
+  end
+  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: -1}, coin_instance, _account) do
+    coin_instance
+    |> Database.CoinInstance.modify(%{account_id: nil})
+  end
 
   def get({:ok, item}), do: get(item)
   def get(%Database.Repo.CoinTransaction{} = coin_transaction), do: coin_transaction

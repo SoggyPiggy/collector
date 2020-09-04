@@ -13,6 +13,7 @@ defmodule Database.Repo.CoinInstance do
     field :condition, :float
 
     belongs_to :coin, Database.Repo.Coin
+    belongs_to :account, Database.Repo.Account
     has_many :coin_transactions, Database.Repo.CoinTransaction
 
     timestamps([type: :utc_datetime])
@@ -102,5 +103,26 @@ defmodule Database.Repo.CoinInstance do
       x when x > 0.10 -> "Fair"
       _ -> "Poor"
     end
+  end
+
+  def owned?(coin_instance), do: (
+    coin_instance
+    |> get()
+    |> Map.get(:account_id)
+  ) != nil
+
+  def owner({:ok, item}, account), do: owner(item, account)
+  def owner(coin_instance, {:ok, item}), do: owner(coin_instance, item)
+  def owner(coin_instance, %Database.Repo.Account{} = account) do
+    coin_instance
+    |> get()
+    |> Map.put(:account, account)
+    |> modify(%{account_id: account.id})
+  end
+  def owner(coin_instance, nil) do
+    coin_instance
+    |> get()
+    |> Map.put(:account, nil)
+    |> modify(%{account_id: nil})
   end
 end

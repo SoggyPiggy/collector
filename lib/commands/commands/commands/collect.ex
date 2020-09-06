@@ -15,8 +15,12 @@ defmodule Commands.Command.Collect do
     account
     |> get_last_collect()
     |> compare_dates()
+    |> admin_override(Database.AccountSettings.all?(account, [:admin, :admin_enabled]))
     |> collect(data)
   end
+
+  defp admin_override(_, true), do: :lt
+  defp admin_override(result, _), do: result
 
   defp collect(:lt, {account, message}) do
     Database.Coin.random()

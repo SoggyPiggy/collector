@@ -49,19 +49,18 @@ defmodule Commands.Command.Collect do
       |> Date.compare(Date.utc_today())
   end
 
-  defp send_reply({:ok, coin_transaction}, message) do
-    coin_instance = coin_transaction |> CoinInstance.get()
-    coin = coin_instance |> Coin.get()
+  defp send_reply({:ok, item}, message), do: send_reply(item, message)
+  defp send_reply(transaction, message) do
     [
-      content: "<@#{(coin_transaction |> Account.get()).discord_id}> collected",
+      content: "<@#{Account.fetch(transaction, :discord_id)}> collected",
       # TODO: Add all the _coin.png's to the directories and add them to author url
       embed:
         %Embed{}
-        |> Embed.put_title(coin.name)
-        |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
-        |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin_instance)}")
-        |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
-        |> Embed.put_footer(CoinInstance.reference(coin_instance))
+        |> Embed.put_title(Coin.fetch(transaction, :name))
+        |> Embed.put_author(Set.structure(transaction, :name) |> Enum.join(" > "), nil, nil)
+        |> Embed.put_description("**Grade**: #{CoinInstance.grade(transaction)}")
+        |> Embed.put_image(Collector.get_asset_url(transaction, ".png"))
+        |> Embed.put_footer(CoinInstance.reference(transaction))
     ]
     |> Discord.send(:reply, message)
   end

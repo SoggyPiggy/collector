@@ -51,6 +51,20 @@ defmodule Database.Repo.CoinTransaction do
     |> Database.CoinInstance.modify(%{account_id: nil})
   end
 
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
+    settings
+    |> get()
+    |> Map.get(key)
+  end
+
   def get({:ok, item}), do: get(item)
   def get(%Database.Repo.CoinTransaction{} = coin_transaction), do: coin_transaction
   def get(id) when is_integer(id) do

@@ -51,6 +51,20 @@ defmodule Database.Repo.CoinInstance do
     |> get()
   end
 
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
+    settings
+    |> get()
+    |> Map.get(key)
+  end
+
   def generate(item, params \\ %{})
   def generate({:ok, item}, params), do: generate(item, params)
   def generate(coin, params) do

@@ -5,13 +5,14 @@ defmodule Database do
   defmodule Account do
     defdelegate new(user), to: Repo.Account
     defdelegate get(item), to: Repo.Account
+    defdelegate fetch(item, key), to: Repo.Account
   end
 
   defmodule AccountSettings do
     defdelegate new(item), to: Repo.AccountSettings
     defdelegate get(item), to: Repo.AccountSettings
-    defdelegate modify(item, params), to: Repo.AccountSettings
     defdelegate fetch(item, key), to: Repo.AccountSettings
+    defdelegate modify(item, params), to: Repo.AccountSettings
     defdelegate all?(item, keys), to: Repo.AccountSettings
     defdelegate any?(item, keys), to: Repo.AccountSettings
     defdelegate toggle(item, key), to: Repo.AccountSettings
@@ -23,6 +24,7 @@ defmodule Database do
     defdelegate new(set, params), to: Repo.Set
     defdelegate get(item), to: Repo.Set
     defdelegate get_nested_set(item), to: Repo.Set
+    defdelegate fetch(item, key), to: Repo.Set
     defdelegate modify(set, params), to: Repo.Set
     defdelegate structure(item, key), to: Repo.Set
   end
@@ -30,6 +32,7 @@ defmodule Database do
   defmodule Coin do
     defdelegate new(item, params), to: Repo.Coin
     defdelegate get(item), to: Repo.Coin
+    defdelegate fetch(item, key), to: Repo.Coin
     defdelegate modify(item, params), to: Repo.Coin
     defdelegate random(), to: Repo.Coin
   end
@@ -38,6 +41,7 @@ defmodule Database do
     defdelegate new(item), to: Repo.CoinInstance
     defdelegate new(item, params), to: Repo.CoinInstance
     defdelegate get(item), to: Repo.CoinInstance
+    defdelegate fetch(item, key), to: Repo.CoinInstance
     defdelegate modify(item, params), to: Repo.CoinInstance
     defdelegate generate(item), to: Repo.CoinInstance
     defdelegate generate(item, options), to: Repo.CoinInstance
@@ -50,6 +54,7 @@ defmodule Database do
   defmodule CoinTransaction do
     defdelegate new(item, account, params), to: Repo.CoinTransaction
     defdelegate get(item), to: Repo.CoinTransaction
+    defdelegate fetch(item, key), to: Repo.CoinTransaction
     defdelegate last(item, reason), to: Repo.CoinTransaction
   end
 
@@ -57,6 +62,7 @@ defmodule Database do
     defdelegate new(item, username, content), to: Repo.Suggestion
     defdelegate new(item, params), to: Repo.Suggestion
     defdelegate get(item), to: Repo.Suggestion
+    defdelegate fetch(item, key), to: Repo.Suggestion
     defdelegate reference(item), to: Repo.Suggestion
   end
 

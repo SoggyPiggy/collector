@@ -54,6 +54,20 @@ defmodule Database.Repo.Set do
     |> get()
   end
 
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
+    settings
+    |> get()
+    |> Map.get(key)
+  end
+
   def get_nested_set({:ok, item}), do: get_nested_set(item)
   def get_nested_set(set) do
     set

@@ -48,4 +48,18 @@ defmodule Database.Repo.Account do
     |> Query.where(discord_id: ^id)
     |> Repo.one()
   end
+
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
+    settings
+    |> get()
+    |> Map.get(key)
+  end
 end

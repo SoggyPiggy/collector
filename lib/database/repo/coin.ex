@@ -57,6 +57,20 @@ defmodule Database.Repo.Coin do
     |> Repo.one()
   end
 
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
+    settings
+    |> get()
+    |> Map.get(key)
+  end
+
   def modify({:ok, item}, params), do: modify(item, params)
   def modify(coin, params) do
     coin

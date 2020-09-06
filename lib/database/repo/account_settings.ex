@@ -60,14 +60,18 @@ defmodule Database.Repo.AccountSettings do
     |> Database.Repo.update()
   end
 
-  def fetch({:ok, item}, key), do: fetch(item, key)
-  def fetch(settings, keys) when is_list(keys),
-    do: Enum.map(keys, fn key -> fetch(settings, key) end)
-  def fetch(%Database.Repo.AccountSettings{} = settings, key) when is_atom(key), do: Map.get(settings, key)
-  def fetch(settings, key) do
+  def fetch(settings, keys) when is_list(keys) do
+    keys
+    |> Enum.map(fn key ->
+      settings
+      |> get()
+      |> fetch(key)
+    end)
+  end
+  def fetch(settings, key) when is_atom(key) do
     settings
     |> get()
-    |> fetch(key)
+    |> Map.get(key)
   end
 
   def all?({:ok, item}, keys), do: all?(item, keys)

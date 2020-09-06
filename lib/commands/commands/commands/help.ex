@@ -15,7 +15,7 @@ defmodule Commands.Command.Help do
       account
       |> Commands.get_appropriate_commands()
       |> Enum.map(fn command -> command.module() end)
-      |> Enum.map(fn command -> "**#{command.title}**: #{command.description}" end)
+      |> Enum.map(fn command -> "**#{command.title}**: `#{command.aliases |> List.first()}` #{command.description}" end)
       |> Enum.join("\n")
     )
     |> Discord.send(:direct, message)

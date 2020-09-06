@@ -72,6 +72,21 @@ defmodule Database.Repo.CoinTransaction do
     |> Database.Repo.get(id)
   end
 
+  def all() do
+    Database.Repo.CoinTransaction
+    |> Database.Repo.all()
+  end
+  def all({:ok, item}), do: all(item)
+  def all(%Database.Repo.Account{} = account) do
+    [account_id: account.id]
+    |> all()
+  end
+  def all(params) when is_list(params) do
+    Database.Repo.CoinTransaction
+    |> Query.where(^params)
+    |> Database.Repo.all()
+  end
+
   def last({:ok, item}, reason), do: last(item, reason)
   def last(%Database.Repo.Account{} = account, reason) do
     Database.Repo.CoinTransaction

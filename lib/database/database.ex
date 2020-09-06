@@ -43,6 +43,8 @@ defmodule Database do
     defdelegate new(item), to: Repo.CoinInstance
     defdelegate new(item, params), to: Repo.CoinInstance
     defdelegate get(item), to: Repo.CoinInstance
+    defdelegate all(), to: Repo.Suggestion
+    defdelegate all(params), to: Repo.Suggestion
     defdelegate fetch(item, key), to: Repo.CoinInstance
     defdelegate modify(item, params), to: Repo.CoinInstance
     defdelegate generate(item), to: Repo.CoinInstance
@@ -57,6 +59,8 @@ defmodule Database do
   defmodule CoinTransaction do
     defdelegate new(item, account, params), to: Repo.CoinTransaction
     defdelegate get(item), to: Repo.CoinTransaction
+    defdelegate all(), to: Repo.Suggestion
+    defdelegate all(params), to: Repo.Suggestion
     defdelegate fetch(item, key), to: Repo.CoinTransaction
     defdelegate last(item, reason), to: Repo.CoinTransaction
   end
@@ -65,6 +69,8 @@ defmodule Database do
     defdelegate new(item, username, content), to: Repo.Suggestion
     defdelegate new(item, params), to: Repo.Suggestion
     defdelegate get(item), to: Repo.Suggestion
+    defdelegate all(), to: Repo.Suggestion
+    defdelegate all(params), to: Repo.Suggestion
     defdelegate fetch(item, key), to: Repo.Suggestion
     defdelegate reference(item), to: Repo.Suggestion
   end

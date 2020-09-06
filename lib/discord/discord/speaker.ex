@@ -1,5 +1,21 @@
 defmodule Discord.Speaker do
+  alias Nostrum.Struct.Embed
+  alias Database.{Coin, CoinInstance, Set}
 
+  def send(message, {:ok, item}, type, data), do: send(message, item, type, data)
+  def send(message, %Database.Repo.CoinInstance{} = coin, type, data) do
+    [
+      content: message,
+      embed:
+        %Embed{}
+        |> Embed.put_title(Coin.fetch(coin, :name))
+        |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
+        |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin)}")
+        |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
+        |> Embed.put_footer(CoinInstance.reference(coin))
+    ]
+    |> Discord.send(type, data)
+  end
   def send(message, type, data) when is_bitstring(message), do: send(%{content: message}, type, data)
   def send(message, :notify, data), do: send(message, :direct, data)
   def send(message, :reply, %Nostrum.Struct.Message{channel_id: channel_id}), do:

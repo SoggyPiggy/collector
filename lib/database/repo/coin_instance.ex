@@ -126,9 +126,16 @@ defmodule Database.Repo.CoinInstance do
 
   def owned?(coin_instance), do: (
     coin_instance
-    |> get()
-    |> Map.get(:account_id)
+    |> fetch(:account_id)
   ) != nil
+
+  def owner?(coin_instance, account), do: (
+    coin_instance
+    |> fetch(:account_id)
+  ) == (
+    account
+    |> Database.Account.fetch(:id)
+  )
 
   def owner({:ok, item}, account), do: owner(item, account)
   def owner(coin_instance, {:ok, item}), do: owner(coin_instance, item)

@@ -50,6 +50,7 @@ defmodule Database do
     defdelegate grade(item), to: Repo.CoinInstance
     defdelegate reference(item), to: Repo.CoinInstance
     defdelegate owned?(item), to: Repo.CoinInstance
+    defdelegate owner?(item, owner), to: Repo.CoinInstance
     defdelegate owner(item, owner), to: Repo.CoinInstance
   end
 

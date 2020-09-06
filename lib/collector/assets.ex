@@ -20,4 +20,9 @@ defmodule Collector.Assets do
       |> Path.join()
     )
   ) <> file_suffix
+  def get_asset(coin, file_suffix) do
+    coin
+    |> Database.Coin.get()
+    |> get_asset(file_suffix)
+  end
 end

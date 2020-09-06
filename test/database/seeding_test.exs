@@ -1,22 +1,15 @@
-defmodule DatabaseTest do
-  use ExUnit.Case, async: true
-  doctest Database
-
-  alias Database.Seeding.{Updater, Generator}
-  alias Database.Seeds
+defmodule Database.SeedingTest do
+  use Collector.DataCase, async: true
+  alias Database.Seeding.Updater
 
   def tuplify(item, tuple \\ {}), do: Tuple.append(tuple, item)
 
-  setup do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Database.Repo)
-  end
-
-  test "seeds update without failure" do
+  test "database seeding update" do
     assert {:ok, version} = Updater.update()
-    assert version |> is_integer()
+    assert true = version |> is_integer()
   end
 
-  test "seeds point to a file" do
+  test "database seeds - point to a real file" do
     Updater.update()
 
     assert [] = (
@@ -25,11 +18,11 @@ defmodule DatabaseTest do
       |> Enum.map(fn coin ->
         File.cwd!()
         |> Path.join("assets/static/")
-        |> Path.join(Database.get_coin_art_path(coin, ".png"))
+        |> Path.join(Collector.get_asset(coin, ".png"))
         |> File.exists?()
         |> tuplify()
         |> Tuple.append(coin.name)
-        |> Tuple.append(Database.get_coin_art_path(coin))
+        |> Tuple.append(Collector.get_asset(coin))
       end)
       |> Enum.filter(fn {exists, _name, _dir} -> !exists end)
     )

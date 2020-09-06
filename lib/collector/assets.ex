@@ -6,13 +6,18 @@ defmodule Collector.Assets do
 
   def get_asset(item, file_suffix \\ "")
   def get_asset({:ok, item}, file_suffix), do: get_asset(item, file_suffix)
-  def get_asset(%Database.Repo.Coin{} = coin, file_suffix), do: Path.join(
-    get_asset(Database.Set.get(coin), ""),
-    Map.get(coin, :file_dir)
+  def get_asset(%Database.Repo.Coin{} = coin, file_suffix), do: (
+    coin
+    |> Database.Set.get()
+    |> get_asset("")
+    |> Path.join(Map.get(coin, :file_dir))
   ) <> file_suffix
   def get_asset(%Database.Repo.Set{} = set, file_suffix), do: (
-    set
-    |> Database.Set.structure(:folder_dir)
-    |> Path.join()
+    "images/coins"
+    |> Path.join(
+      set
+      |> Database.Set.structure(:folder_dir)
+      |> Path.join()
+    )
   ) <> file_suffix
 end

@@ -70,6 +70,11 @@ defmodule Database.Repo.Coin do
     |> Query.where(name: ^name)
     |> Repo.one()
   end
+  def get(params) when is_list(params) do
+    Database.Repo.Coin
+    |> Query.where(^params)
+    |> Repo.one()
+  end
 
   def fetch(settings, keys) when is_list(keys) do
     keys

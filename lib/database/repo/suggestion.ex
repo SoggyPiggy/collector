@@ -39,6 +39,11 @@ defmodule Database.Repo.Suggestion do
     |> String.to_integer(36)
     |> get()
   end
+  def get(params) when is_list(params) do
+    Database.Repo.Coin
+    |> Query.where(^params)
+    |> Repo.one()
+  end
 
   def fetch(settings, keys) when is_list(keys) do
     keys

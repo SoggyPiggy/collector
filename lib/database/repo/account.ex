@@ -48,6 +48,11 @@ defmodule Database.Repo.Account do
     |> Query.where(discord_id: ^id)
     |> Repo.one()
   end
+  def get(params) when is_list(params) do
+    Database.Repo.Account
+    |> Query.where(^params)
+    |> Repo.one()
+  end
 
   def fetch(settings, keys) when is_list(keys) do
     keys

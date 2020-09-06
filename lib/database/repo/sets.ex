@@ -48,6 +48,11 @@ defmodule Database.Repo.Set do
     |> Query.where(name: ^name)
     |> Repo.one()
   end
+  def get(params) when is_list(params) do
+    Database.Repo.Coin
+    |> Query.where(^params)
+    |> Repo.one()
+  end
   def get(item) do
     item
     |> Database.Coin.get()

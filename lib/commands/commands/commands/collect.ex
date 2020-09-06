@@ -1,4 +1,5 @@
 defmodule Commands.Command.Collect do
+  alias Database.{Account, AccountSettings, Coin, CoinInstance, CoinTransaction, Set}
   alias Nostrum.Struct.Embed
 
   @command %Commands.Command{
@@ -15,7 +16,7 @@ defmodule Commands.Command.Collect do
     account
     |> get_last_collect()
     |> compare_dates()
-    |> admin_override(Database.AccountSettings.all?(account, [:admin, :admin_enabled]))
+    |> admin_override(AccountSettings.all?(account, [:admin, :admin_enabled]))
     |> collect(data)
   end
 
@@ -23,9 +24,9 @@ defmodule Commands.Command.Collect do
   defp admin_override(result, _), do: result
 
   defp collect(:lt, {account, message}) do
-    Database.Coin.random()
-    |> Database.CoinInstance.generate()
-    |> Database.CoinTransaction.new(account, "collect")
+    Coin.random()
+    |> CoinInstance.generate()
+    |> CoinTransaction.new(account, "collect")
     |> send_reply(message)
   end
   defp collect(_, {%{discord_id: id}, message}) do
@@ -38,7 +39,7 @@ defmodule Commands.Command.Collect do
 
   defp get_last_collect(account) do
     account
-    |> Database.CoinTransaction.last("collect")
+    |> CoinTransaction.last("collect")
   end
 
   defp compare_dates(nil), do: :lt
@@ -48,35 +49,21 @@ defmodule Commands.Command.Collect do
       |> Date.compare(Date.utc_today())
   end
 
-  defp send_reply({:ok, %{account: account, } = coin_transaction}, message) do
-    data = get_coin_structs(coin_transaction)
+  defp send_reply({:ok, coin_transaction}, message) do
+    coin_instance = coin_transaction |> CoinInstance.get()
+    coin = coin_instance |> Coin.get()
     [
-      content: "<@#{account.discord_id}> collected",
+      content: "<@#{(coin_transaction |> Account.get()).discord_id}> collected",
       # TODO: Add all the _coin.png's to the directories and add them to author url
       embed:
         %Embed{}
-        |> Embed.put_title(data.coin.name)
-        |> Embed.put_author(Database.Set.structure(data.coin, :name) |> Enum.join(" > "), nil, nil)
-        |> Embed.put_description("**Grade**: #{Database.CoinInstance.grade(data.coin_instance)}")
-        |> Embed.put_image(Collector.get_asset_url(data.coin))
+        |> Embed.put_title(coin.name)
+        |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
+        |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin_instance)}")
+        |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
+        |> Embed.put_footer(CoinInstance.reference(coin_instance))
     ]
     |> Discord.send(:reply, message)
-  end
-
-  defp get_coin_structs(coin_transaction) do
-    coin_instance = coin_transaction.coin_instance
-    coin = coin_instance.coin
-    set =
-      coin
-      |> Database.preload(:set)
-      |> Map.get(:set)
-
-    %{
-      coin_transaction: coin_transaction,
-      coin_instance: coin_instance,
-      coin: coin,
-      set: set
-    }
   end
 
   defp get_time_until_next() do

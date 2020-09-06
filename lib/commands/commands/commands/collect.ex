@@ -1,6 +1,5 @@
 defmodule Commands.Command.Collect do
   alias Database.{Account, AccountSettings, Coin, CoinInstance, CoinTransaction, Set}
-  alias Nostrum.Struct.Embed
 
   @command %Commands.Command{
     id: :collect,
@@ -53,18 +52,8 @@ defmodule Commands.Command.Collect do
 
   defp send_reply({:ok, item}, message), do: send_reply(item, message)
   defp send_reply(transaction, message) do
-    [
-      content: "<@#{Account.fetch(transaction, :discord_id)}> collected",
-      # TODO: Add all the _coin.png's to the directories and add them to author url
-      embed:
-        %Embed{}
-        |> Embed.put_title(Coin.fetch(transaction, :name))
-        |> Embed.put_author(Set.structure(transaction, :name) |> Enum.join(" > "), nil, nil)
-        |> Embed.put_description("**Grade**: #{CoinInstance.grade(transaction)}")
-        |> Embed.put_image(Collector.get_asset_url(transaction, ".png"))
-        |> Embed.put_footer(CoinInstance.reference(transaction))
-    ]
-    |> Discord.send(:reply, message)
+    "<@#{Account.fetch(transaction, :discord_id)}> collected"
+    |> Discord.send(Database.CoinInstance.get(transaction), :reply, message)
   end
 
   defp get_time_until_next() do

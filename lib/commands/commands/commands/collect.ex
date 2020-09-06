@@ -28,6 +28,8 @@ defmodule Commands.Command.Collect do
     |> CoinInstance.generate()
     |> CoinTransaction.new(account, "collect")
     |> send_reply(message)
+
+    LandOfDiscordia.check_and_invite(account)
   end
   defp collect(_, {%{discord_id: id}, message}) do
     """

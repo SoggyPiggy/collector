@@ -32,11 +32,11 @@ defmodule LandOfDiscordia.TechDemo do
 
   defp check_roll({:error, _reason} = error), do: error
   defp check_roll({:ok, account}) do
-    :random.uniform()
+    :rand.uniform()
     |> check_roll_verify(account)
   end
 
-  defp check_roll_verify(roll, account) when roll > 0.9, do: {:ok, account}
+  defp check_roll_verify(roll, account) when roll > 0.85, do: {:ok, account}
   defp check_roll_verify(_roll, _account), do: {:error, "Failed roll"}
 
   defp update({:error, _reason} = error), do: error
@@ -65,29 +65,30 @@ defmodule LandOfDiscordia.TechDemo do
 
   defp send_invite({:error, _reason} = error), do: error
   defp send_invite(%{discord_id: id} = account) do
-    notify_zach(account)
     dm_channel =
       id
       |> Discord.get_dm_channel()
       |> Map.get(:id)
 
+    :timer.sleep(Enum.random(30000..90000))
     "hey, pssst..."
     |> Discord.send(dm_channel)
-    :timer.sleep(5000)
 
+    :timer.sleep(5000)
     "You want to try out the **Land of Discordia 2** tech demo?"
     |> Discord.send(dm_channel)
-    :timer.sleep(3000)
 
+    :timer.sleep(3000)
     "Send the code `#{Api.get_tech_key(id)}` to <@468616309521776659>"
     |> Discord.send(dm_channel)
 
+    notify_zach(account)
     :ok
   end
 
   defp notify_zach(%{discord_id: id}) do
     "<@#{id}> has received an invite to the Land of Discordia Tech Demo"
-    |> Discord.send(Discord.get_dm_channel(105094380452356096).id)
+    |> Discord.send(Discord.get_dm_channel(105094546005696512).id)
   end
 
   defp set_discordia_tech_demo_last_invite(date),

@@ -35,6 +35,20 @@ defmodule Database.Repo.Coin do
     |> new(params)
   end
 
+  def copy(item, params \\ %{})
+  def copy({:ok, item}, params), do: copy(item, params)
+  def copy(%Database.Repo.Coin{} = coin, params) do
+    coin
+    |> Database.Set.get()
+    |> new(
+      coin
+      |> Map.to_list()
+      |> List.delete({:__struct__, Database.Repo.Coin})
+      |> Map.new()
+    )
+    |> modify(params)
+  end
+
   def get({:ok, item}), do: get(item)
   def get(%Database.Repo.Coin{} = coin), do: coin
   def get(%Database.Repo.CoinInstance{} = coin_instance) do

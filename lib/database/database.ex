@@ -31,6 +31,8 @@ defmodule Database do
 
   defmodule Coin do
     defdelegate new(item, params), to: Repo.Coin
+    defdelegate copy(item), to: Repo.Coin
+    defdelegate copy(item, params), to: Repo.Coin
     defdelegate get(item), to: Repo.Coin
     defdelegate fetch(item, key), to: Repo.Coin
     defdelegate modify(item, params), to: Repo.Coin

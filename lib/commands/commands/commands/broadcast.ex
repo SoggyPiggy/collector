@@ -3,7 +3,7 @@ defmodule Commands.Command.Broadcast do
     id: :broadcast,
     title: "Broadcast",
     description: "Broadcasts a message to a specific channel",
-    aliases: ["broadcast", "echo"],
+    aliases: ["ecto", "broadcast"],
     examples: [">echo --channel 736021368981946409 --message \"This is one big ol example\""],
     is_public: false,
     args_strict: [{:channel, :integer}, {:message, :string}]

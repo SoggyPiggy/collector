@@ -3,7 +3,7 @@ defmodule Commands.Command.Help do
     id: :help,
     title: "Help",
     description: "Displays helpful information",
-    aliases: ["help", "h"],
+    aliases: ["h", "help"],
     examples: [">help"],
     for_unregistered: true,
   }

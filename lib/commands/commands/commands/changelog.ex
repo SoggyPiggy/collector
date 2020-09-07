@@ -3,7 +3,7 @@ defmodule Commands.Command.Changelog do
     id: :patch_notes,
     title: "Patch Notes",
     description: "Check out the latest patch notes to find out whats new",
-    aliases: ["patchnotes", "patch", "patch-notes", "whatsnew", "changelog", "pn", "cl"],
+    aliases: ["patch", "patchnotes", "patch-notes", "whatsnew", "changelog"],
     examples: [">whatsnew"]
   }
 

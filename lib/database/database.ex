@@ -5,12 +5,16 @@ defmodule Database do
   defmodule Account do
     defdelegate new(user), to: Repo.Account
     defdelegate get(item), to: Repo.Account
+    defdelegate all(), to: Repo.Account
+    defdelegate all(params), to: Repo.Account
     defdelegate fetch(item, key), to: Repo.Account
   end
 
   defmodule AccountSettings do
     defdelegate new(item), to: Repo.AccountSettings
     defdelegate get(item), to: Repo.AccountSettings
+    defdelegate all(), to: Repo.AccountSettings
+    defdelegate all(params), to: Repo.AccountSettings
     defdelegate fetch(item, key), to: Repo.AccountSettings
     defdelegate modify(item, params), to: Repo.AccountSettings
     defdelegate all?(item, keys), to: Repo.AccountSettings
@@ -24,6 +28,8 @@ defmodule Database do
     defdelegate new(set, params), to: Repo.Set
     defdelegate get(item), to: Repo.Set
     defdelegate get_nested_set(item), to: Repo.Set
+    defdelegate all(), to: Repo.Set
+    defdelegate all(params), to: Repo.Set
     defdelegate fetch(item, key), to: Repo.Set
     defdelegate modify(set, params), to: Repo.Set
     defdelegate structure(item, key), to: Repo.Set
@@ -33,6 +39,8 @@ defmodule Database do
     defdelegate new(item, params), to: Repo.Coin
     defdelegate copy(item), to: Repo.Coin
     defdelegate copy(item, params), to: Repo.Coin
+    defdelegate all(), to: Repo.Coin
+    defdelegate all(params), to: Repo.Coin
     defdelegate get(item), to: Repo.Coin
     defdelegate fetch(item, key), to: Repo.Coin
     defdelegate modify(item, params), to: Repo.Coin

@@ -52,6 +52,17 @@ defmodule Database.Repo.AccountSettings do
     |> get()
   end
 
+  def all() do
+    Database.Repo.AccountSettings
+    |> Database.Repo.all()
+  end
+  def all({:ok, item}), do: all(item)
+  def all(params) when is_list(params) do
+    Database.Repo.AccountSettings
+    |> Query.where(^params)
+    |> Database.Repo.all()
+  end
+
   def modify({:ok, item}, params), do: modify(item, params)
   def modify(settings, params) do
     settings

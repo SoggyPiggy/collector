@@ -59,6 +59,17 @@ defmodule Database.Repo.Set do
     |> get()
   end
 
+  def all() do
+    Database.Repo.Set
+    |> Database.Repo.all()
+  end
+  def all({:ok, item}), do: all(item)
+  def all(params) when is_list(params) do
+    Database.Repo.Set
+    |> Query.where(^params)
+    |> Database.Repo.all()
+  end
+
   def fetch(settings, keys) when is_list(keys) do
     keys
     |> Enum.map(fn key ->

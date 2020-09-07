@@ -1,5 +1,5 @@
 defmodule Commands.Command.Collect do
-  alias Database.{Account, AccountSettings, Coin, CoinInstance, CoinTransaction, Set}
+  alias Database.{Account, AccountSettings, Coin, CoinInstance, CoinTransaction}
 
   @command %Commands.Command{
     id: :collect,

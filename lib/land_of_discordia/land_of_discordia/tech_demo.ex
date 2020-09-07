@@ -1,12 +1,38 @@
 defmodule LandOfDiscordia.TechDemo do
-  alias LandOfDiscordia.Api
+  use GenServer
+
+  def start_link(), do: GenServer.start_link(__MODULE__, {})
+
+  def check_and_invite({:ok, item}), do: check_and_invite(item)
   def check_and_invite(%Database.Repo.Account{} = account) do
+    {:ok, pid} = start_link()
+    GenServer.cast(pid, {:check_and_invite, account})
+  end
+
+  def get_and_send({:error, _reason}), do: {:noreply, {}}
+  def get_and_send({:ok, item}), do: get_and_send(item)
+  def get_and_send(account) do
+    {:ok, pid} = start_link()
+    GenServer.cast(pid, {:send_invite, account})
+  end
+
+  def init(stack), do: {:ok, stack}
+
+  def handle_cast({:check_and_invite, account}, _state) do
     account
     |> check_global()
     |> check_account()
     |> check_roll()
     |> update()
-    |> send_invite()
+    |> get_and_send()
+
+    {:noreply, {}}
+  end
+
+  def handle_cast({:send_invite, %{discord_id: id}}, _state) do
+    id
+    |> LandOfDiscordia.Api.get_tech_key()
+    |> send_invite(id)
   end
 
   defp check_global(account) do
@@ -63,14 +89,13 @@ defmodule LandOfDiscordia.TechDemo do
     account
   end
 
-  defp send_invite({:error, _reason} = error), do: error
-  defp send_invite(%{discord_id: id} = account) do
+  defp send_invite(key, id) do
     dm_channel =
       id
       |> Discord.get_dm_channel()
       |> Map.get(:id)
 
-    :timer.sleep(Enum.random(30000..90000))
+    :timer.sleep(5000)
     "hey, pssst..."
     |> Discord.send(dm_channel)
 
@@ -79,16 +104,13 @@ defmodule LandOfDiscordia.TechDemo do
     |> Discord.send(dm_channel)
 
     :timer.sleep(3000)
-    "Send the code `#{Api.get_tech_key(id)}` to <@468616309521776659>"
+    "Send the code `#{key}` to <@468616309521776659>"
     |> Discord.send(dm_channel)
 
-    notify_zach(account)
-    :ok
-  end
-
-  defp notify_zach(%{discord_id: id}) do
     "<@#{id}> has received an invite to the Land of Discordia Tech Demo"
     |> Discord.send(Discord.get_dm_channel(105094546005696512).id)
+
+    {:noreply, {}}
   end
 
   defp set_discordia_tech_demo_last_invite(date),

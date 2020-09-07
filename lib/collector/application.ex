@@ -13,7 +13,9 @@ defmodule Collector.Application do
       # Start the endpoint when the application starts
       CollectorWeb.Endpoint,
       # Start the nostrum discord connection
-      Discord.Consumer
+      Discord.Consumer,
+      # Start the LandOfDiscordia application
+      LandOfDiscordia.TechDemo,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

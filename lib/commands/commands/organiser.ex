@@ -5,6 +5,7 @@ defmodule Commands.Organiser do
     Command.Help,
     Command.Registry,
     Command.Collect,
+    Command.Collection,
     Command.ViewCoin,
     Command.Suggest,
     Command.Changelog,

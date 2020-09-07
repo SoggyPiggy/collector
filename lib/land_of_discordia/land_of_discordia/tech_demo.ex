@@ -1,6 +1,7 @@
 defmodule LandOfDiscordia.TechDemo do
   use GenServer
 
+  def start_link(_), do: start_link()
   def start_link(), do: GenServer.start_link(__MODULE__, {})
 
   def check_and_invite({:ok, item}), do: check_and_invite(item)

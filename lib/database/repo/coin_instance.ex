@@ -67,6 +67,10 @@ defmodule Database.Repo.CoinInstance do
     [account_id: account.id]
     |> all()
   end
+  def all(%Database.Repo.Coin{} = coin) do
+    [coin_id: coin.id]
+    |> all()
+  end
   def all(params) when is_list(params) do
     Database.Repo.CoinInstance
     |> Query.where(^params)

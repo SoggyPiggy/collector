@@ -23,6 +23,16 @@ defmodule Discord.Speaker do
 
   defp send_message(message, id), do: Nostrum.Api.create_message(id, message)
 
+  defp embedify(%Database.Repo.Account{} = account) do
+    discord_user = Nostrum.Api.get_user!(account.discord_id)
+    coins = Database.CoinInstance.all(account)
+
+    %Embed{}
+    |> Embed.put_title("#{discord_user.username}")
+    |> Embed.put_description("""
+    **Collection Count**: #{coins |> Enum.count()}
+    """)
+  end
   defp embedify(%Database.Repo.CoinInstance{} = coin) do
     %Embed{}
     |> Embed.put_title(Coin.fetch(coin, :name))

@@ -4,6 +4,7 @@ defmodule Commands.Organiser do
   @commands [
     Command.Help,
     Command.Registry,
+    Command.Profile,
     Command.Collect,
     Command.Collection,
     Command.ViewCoin,

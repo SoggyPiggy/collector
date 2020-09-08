@@ -6,12 +6,18 @@ defmodule Database.Repo.CoinInstance do
 
   @modifiables [
     :condition,
+    :condition_natural,
+    :condition_roll,
+    :is_altered,
     :account_id,
     :value
   ]
 
   schema "coin_instances" do
     field :condition, :float
+    field :condition_natural, :float
+    field :condition_roll, :float
+    field :is_altered, :boolean
     field :value, :float, default: 0.0
 
     belongs_to :coin, Database.Repo.Coin
@@ -94,19 +100,28 @@ defmodule Database.Repo.CoinInstance do
   def generate(item, params \\ %{})
   def generate({:ok, item}, params), do: generate(item, params)
   def generate(coin, params) do
-    coin
-    |> Database.Coin.get()
-    |> new(%{condition:
-      Map.get(params, :seeder, &:rand.uniform/0).()
+    condition_roll = Map.get(params, :seeder, &:rand.uniform/0).()
+    condition =
+      condition_roll
       |> fn value -> value * Map.get(params, :pre_multiplier, 1) end.()
       |> fn value -> value + Map.get(params, :pre_addition, 0) end.()
       |> Map.get(params, :processor, &generate_condition/1).()
       |> fn value -> value * Map.get(params, :post_multiplier, 1) end.()
       |> fn value -> value + Map.get(params, :post_addition, 0) end.()
+
+    coin
+    |> Database.Coin.get()
+    |> new(%{
+      condition: condition,
+      condition_natural: condition,
+      condition_roll: condition_roll
     })
   end
 
-  defp generate_condition(value), do: (:math.pow(2 * value - 1, 3) / 2) + 0.5
+  defp generate_condition(0), do: 0
+  defp generate_condition(1), do: 1
+  defp generate_condition(x) when x < 0.5, do: 1 - generate_condition(1 - x)
+  defp generate_condition(x), do: (:math.pow(2 * x - 1, 2.2) / 2) + 0.5
 
   def modify(item, params \\ %{})
   def modify({:ok, item}, params), do: modify(item, params)
@@ -133,15 +148,19 @@ defmodule Database.Repo.CoinInstance do
     |> get()
     |> Map.get(:condition)
     |> case do
-      x when x > 0.95 -> "About Uncirculated"
-      x when x > 0.90 -> "Extremely Fine"
-      x when x > 0.75 -> "Very Fine"
-      x when x > 0.70 -> "Fine"
-      x when x > 0.50 -> "Very Good"
-      x when x > 0.25 -> "Good"
-      x when x > 0.20 -> "About Good"
-      x when x > 0.10 -> "Fair"
-      _ -> "Poor"
+      x when x >= 1.00 -> "Mint"
+      x when x >= 0.95 -> "Excellent"
+      x when x >= 0.85 -> "Great"
+      x when x >= 0.75 -> "Good"
+      x when x >= 0.65 -> "Decent"
+      x when x >= 0.55 -> "Fair"
+      x when x >= 0.45 -> "Average"
+      x when x >= 0.35 -> "Mediocre"
+      x when x >= 0.25 -> "Poor"
+      x when x >= 0.15 -> "Bad"
+      x when x >= 0.05 -> "Terrible"
+      x when x >  0.00 -> "Abysmal"
+      _                -> "Cum Ridden"
     end
   end
 

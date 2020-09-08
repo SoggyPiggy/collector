@@ -8,6 +8,9 @@ defmodule Database.Repo.Migrations.AddValuesToCoinsAndInstances do
 
     alter table(:coin_instances) do
       add :value, :float
+      add :condition_roll, :float
+      add :condition_natural, :float
+      add :is_altered, :boolean
     end
   end
 end

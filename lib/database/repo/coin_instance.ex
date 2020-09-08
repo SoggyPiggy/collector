@@ -6,11 +6,13 @@ defmodule Database.Repo.CoinInstance do
 
   @modifiables [
     :condition,
-    :account_id
+    :account_id,
+    :value
   ]
 
   schema "coin_instances" do
     field :condition, :float
+    field :value, :float, default: 0.0
 
     belongs_to :coin, Database.Repo.Coin
     belongs_to :account, Database.Repo.Account

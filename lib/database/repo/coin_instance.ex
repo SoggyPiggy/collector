@@ -114,7 +114,8 @@ defmodule Database.Repo.CoinInstance do
     |> new(%{
       condition: condition,
       condition_natural: condition,
-      condition_roll: condition_roll
+      condition_roll: condition_roll,
+      value: Database.Coin.fetch(coin, :value) * condition
     })
   end
 
@@ -190,5 +191,28 @@ defmodule Database.Repo.CoinInstance do
     |> get()
     |> Map.put(:account, nil)
     |> modify(%{account_id: nil})
+  end
+
+  def update_value(coin_instance) do
+    coin_instance
+    |> get()
+    |> update_value(
+      coin_instance
+      |> get()
+      |> Database.Coin.get()
+    )
+  end
+  def update_value(coin_instance, coin) do
+    coin_instance
+    |> get()
+    |> modify(%{
+      value: (
+        coin
+        |> Database.Coin.fetch(:value)
+      ) * (
+        coin_instance
+        |> fetch(:condition)
+      )
+    })
   end
 end

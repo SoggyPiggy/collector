@@ -4,6 +4,21 @@ defmodule Changelog.Change.Version_0_2_X do
     name: "Baby Steps",
     patches: [
       %Changelog.Patch{
+        version: "1",
+        notes: [
+          {"Whats New", [
+            "The old coin grade scheme was based off of real life coin grading, but they're dumb so its been changed"
+          ]},
+          {"Changed", [
+            "Coin grade naming convention",
+            "Coin grade generation uses new bell curve"
+          ]},
+          {"Fixed", [
+            "Potentially bugged coin grade generation"
+          ]}
+        ]
+      },
+      %Changelog.Patch{
         version: "0",
         notes: [
           {"Whats New", [
@@ -24,9 +39,9 @@ defmodule Changelog.Change.Version_0_2_X do
             "Modified a good portion of the internal coding structure"
           ]},
           {"WIP Features", [
-            "proper command argument handling",
-            "improvement of already added commands",
-            "more features",
+            "Proper command argument handling",
+            "Improvement of already added commands",
+            "More features",
             "Additional ways of collecting coins",
             "Visual indication of coin condition"
           ]}

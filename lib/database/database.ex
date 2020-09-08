@@ -45,6 +45,7 @@ defmodule Database do
     defdelegate fetch(item, key), to: Repo.Coin
     defdelegate modify(item, params), to: Repo.Coin
     defdelegate random(), to: Repo.Coin
+    defdelegate update_value(item), to: Repo.Coin
   end
 
   defmodule CoinInstance do

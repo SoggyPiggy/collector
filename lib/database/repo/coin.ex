@@ -128,4 +128,47 @@ defmodule Database.Repo.Coin do
   defp random_search_validate(_coins, coin, rand_pos, cur_pos) when cur_pos >= rand_pos, do: coin
   defp random_search_validate(coins, _coin, rand_pos, cur_pos),
     do: random_search({coins, rand_pos}, cur_pos)
+
+  def update_value(coin) do
+    coin
+    |> get()
+    |> update_value(
+      Database.Account.all()
+      |> Enum.count(),
+      coin
+      |> get()
+      |> Database.CoinInstance.all()
+      |> Enum.map(fn instance -> instance.account_id end)
+      |> Enum.filter(fn id -> id != nil end)
+      |> Enum.uniq()
+      |> Enum.count()
+    )
+  end
+
+  def update_value(%Database.Repo.Coin{} = coin, account_count, owners_count) do
+    coin
+    |> fetch(:weight)
+    |> update_value_weight()
+    |> update_value_unique(owners_count, account_count)
+    |> update_value_circulation(coin.in_circulation)
+    |> update_value_finalize(coin)
+  end
+
+  defp update_value_weight(x), do: :math.pow((1000 / x), 3) * 5
+
+  defp update_value_unique(x, 0, _accounts_total), do: x
+  defp update_value_unique(x, 1, _accounts_total), do: x
+  defp update_value_unique(x, owners_count, accounts_total), do: (
+    x * 0.5 * (1 - ((owners_count - 1) / accounts_total))
+  ) + (
+    x * 0.5
+  )
+
+  defp update_value_circulation(x, true), do: x
+  defp update_value_circulation(x, false), do: x * 1.2
+
+  defp update_value_finalize(value, coin) do
+    coin
+    |> modify(%{value: value})
+  end
 end

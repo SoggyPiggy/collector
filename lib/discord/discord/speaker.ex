@@ -32,6 +32,7 @@ defmodule Discord.Speaker do
     |> Embed.put_description("""
     **Collection Count**: #{coins |> Enum.count()}
     """)
+    |> Embed.put_thumbnail(Nostrum.Struct.User.avatar_url(discord_user))
   end
   defp embedify(%Database.Repo.CoinInstance{} = coin) do
     %Embed{}

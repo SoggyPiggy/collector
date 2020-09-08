@@ -3,16 +3,10 @@ defmodule Discord.Speaker do
   alias Database.{Coin, CoinInstance, Set}
 
   def send(message, {:ok, item}, type, data), do: send(message, item, type, data)
-  def send(message, %Database.Repo.CoinInstance{} = coin, type, data) do
+  def send(message, embed_item, type, data) do
     [
       content: message,
-      embed:
-        %Embed{}
-        |> Embed.put_title(Coin.fetch(coin, :name))
-        |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
-        |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin)}")
-        |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
-        |> Embed.put_footer(CoinInstance.reference(coin))
+      embed: embedify(embed_item)
     ]
     |> Discord.send(type, data)
   end
@@ -28,4 +22,13 @@ defmodule Discord.Speaker do
     send_message(message, id)
 
   defp send_message(message, id), do: Nostrum.Api.create_message(id, message)
+
+  defp embedify(%Database.Repo.CoinInstance{} = coin) do
+    %Embed{}
+    |> Embed.put_title(Coin.fetch(coin, :name))
+    |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
+    |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin)}")
+    |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
+    |> Embed.put_footer(CoinInstance.reference(coin))
+  end
 end

@@ -16,6 +16,8 @@ defmodule Collector.Application do
       Discord.Consumer,
       # Start the LandOfDiscordia application
       LandOfDiscordia.TechDemo,
+      # Update the coin values every hour
+      %{id: "hourly-coin-value-update", start: {SchedEx, :run_every, [Scheduled, :run_evaluate_coin_values, [], "0 * * * *"]}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

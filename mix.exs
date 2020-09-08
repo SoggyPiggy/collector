@@ -46,6 +46,7 @@ defmodule Collector.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:nostrum, "~> 0.4"},
+      {:sched_ex, "~> 1.1"},
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false}
     ]
   end

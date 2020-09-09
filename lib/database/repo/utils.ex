@@ -24,4 +24,16 @@ defmodule Database.Repo.Utils do
     |> Macro.underscore()
     |> String.to_atom()
   end
+
+  def friendly_coin_value(value) when is_float(value), do: "¤#{Float.round(value, 2)}"
+  def friendly_coin_value(%Database.Repo.Coin{} = coin) do
+    coin
+    |> Database.Coin.fetch(:value)
+    |> friendly_coin_value()
+  end
+  def friendly_coin_value(%Database.Repo.CoinInstance{} = coin) do
+    coin
+    |> Database.CoinInstance.fetch(:value)
+    |> friendly_coin_value()
+  end
 end

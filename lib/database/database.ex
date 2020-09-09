@@ -86,6 +86,7 @@ defmodule Database do
     defdelegate reference(item), to: Repo.Suggestion
   end
 
+  defdelegate friendly_coin_value(coin), to: Repo.Utils
   defdelegate add_association(table, association), to: Repo.Utils
   defdelegate preload(table, association), to: Repo.Utils
 

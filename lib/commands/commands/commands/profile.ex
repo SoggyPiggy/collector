@@ -10,20 +10,20 @@ defmodule Commands.Command.Profile do
 
   def module(), do: @command
 
-  def execute("", {%Database.Repo.Account{discord_id: id} = account, message}) do
+  def execute("", {%Database.Repo.Account{} = account, message}) do
     account
-    |> send_account("<@#{id}>", message)
+    |> send_account(message)
   end
 
-  def execute(args, {%Database.Repo.Account{discord_id: id}, message}) do
+  def execute(args, {_account, message}) do
     args
     |> String.trim()
     |> String.replace(~r/<@!?|>/, "")
     |> String.to_integer()
     |> Database.Account.get()
-    |> send_account("<@#{id}>", message)
+    |> send_account(message)
   end
 
-  defp send_account(nil, _content, _message), do: nil
-  defp send_account(account, content, message), do: Discord.send(content, account, :reply, message)
+  defp send_account(nil, _message), do: nil
+  defp send_account(account, message), do: Discord.send("", account, :reply, message)
 end

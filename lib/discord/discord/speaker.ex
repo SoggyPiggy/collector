@@ -26,11 +26,16 @@ defmodule Discord.Speaker do
   defp embedify(%Database.Repo.Account{} = account) do
     discord_user = Nostrum.Api.get_user!(account.discord_id)
     coins = Database.CoinInstance.all(account)
+    coin_count = coins |> Enum.count()
+    worth_total = Enum.reduce(coins, 0, fn coin, acc -> acc + coin.value end)
+    worth_average = worth_total / coin_count
 
     %Embed{}
-    |> Embed.put_title("#{discord_user.username}")
+    |> Embed.put_title("#{discord_user.username}'s Profile")
     |> Embed.put_description("""
-    **Collection Count**: #{coins |> Enum.count()}
+    **Coins**: #{coin_count}
+    **Coins Total Value**: #{Database.friendly_coin_value(worth_total)}
+    **Coins Average Value**: #{Database.friendly_coin_value(worth_average)}
     """)
     |> Embed.put_thumbnail(Nostrum.Struct.User.avatar_url(discord_user))
   end

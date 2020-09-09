@@ -43,7 +43,10 @@ defmodule Discord.Speaker do
     %Embed{}
     |> Embed.put_title(Coin.fetch(coin, :name))
     |> Embed.put_author(Set.structure(coin, :name) |> Enum.join(" > "), nil, nil)
-    |> Embed.put_description("**Grade**: #{CoinInstance.grade(coin)}")
+    |> Embed.put_description("""
+    **Grade**: #{CoinInstance.grade(coin)}
+    **Value**: #{Database.friendly_coin_value(coin)}
+    """)
     |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
     |> Embed.put_footer(CoinInstance.reference(coin))
   end

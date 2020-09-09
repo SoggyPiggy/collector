@@ -150,17 +150,17 @@ defmodule Database.Repo.CoinInstance do
     |> Map.get(:condition)
     |> case do
       x when x >= 1.00 -> "Mint"
-      x when x >= 0.95 -> "Excellent"
-      x when x >= 0.85 -> "Great"
+      x when x >= 0.95 -> "Almost Mint"
+      x when x >= 0.85 -> "Above Good"
       x when x >= 0.75 -> "Good"
-      x when x >= 0.65 -> "Decent"
-      x when x >= 0.55 -> "Fair"
+      x when x >= 0.65 -> "Below Good"
+      x when x >= 0.55 -> "Above Average"
       x when x >= 0.45 -> "Average"
-      x when x >= 0.35 -> "Mediocre"
-      x when x >= 0.25 -> "Poor"
+      x when x >= 0.35 -> "Below Average"
+      x when x >= 0.25 -> "Above Bad"
       x when x >= 0.15 -> "Bad"
-      x when x >= 0.05 -> "Terrible"
-      x when x >  0.00 -> "Abysmal"
+      x when x >= 0.05 -> "Below Bad"
+      x when x >  0.00 -> "Terrible"
       _                -> "Cum Ridden"
     end
   end

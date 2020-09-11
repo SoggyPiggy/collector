@@ -38,7 +38,6 @@ defmodule Discord.Speaker do
       |> Database.Account.fetch(:coin_transactions)
       |> Enum.filter(fn transaction -> transaction.reason == "collect" end)
       |> Enum.reduce(0, fn transaction, acc -> acc + transaction.amount end)
-      |> Enum.count()
     worth_total = Enum.reduce(coins, 0, fn coin, acc -> acc + coin.value end)
     worth_average = worth_total / coin_count
 

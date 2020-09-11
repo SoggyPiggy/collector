@@ -25,7 +25,17 @@ defmodule Database.Repo.Utils do
     |> String.to_atom()
   end
 
-  def friendly_coin_value(value) when is_float(value), do: "¤#{Float.round(value, 2)}"
+  def friendly_coin_value(value) when is_bitstring(value) do
+    [front | [back]] =
+      value
+      |> String.split(".")
+
+    "#{front}.#{back |> String.pad_trailing(2, "0")}"
+  end
+  def friendly_coin_value(value) when is_float(value) do
+    "¤#{Float.round(value, 2)}"
+    |> friendly_coin_value()
+  end
   def friendly_coin_value(%Database.Repo.Coin{} = coin) do
     coin
     |> Database.Coin.fetch(:value)

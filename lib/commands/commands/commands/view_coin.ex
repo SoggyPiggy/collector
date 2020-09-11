@@ -12,7 +12,6 @@ defmodule Commands.Command.ViewCoin do
   def execute("", _), do: nil
   def execute(coin_reference, {account, message}) do
     coin_reference
-    |> IO.inspect()
     |> get_coin()
     |> check_owner(account)
     |> send_reply(message)

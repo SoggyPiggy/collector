@@ -1,5 +1,5 @@
 defmodule Commands.Command.Collect do
-  alias Database.{Account, AccountSettings, Coin, CoinInstance, CoinTransaction}
+  alias Database.{Account, AccountSettings, CoinTransaction}
 
   @command %Commands.Command{
     id: :collect,
@@ -23,9 +23,8 @@ defmodule Commands.Command.Collect do
   defp admin_override(result, _), do: result
 
   defp collect(:lt, {account, message}) do
-    Coin.random()
-    |> CoinInstance.generate()
-    |> CoinTransaction.new(account, "collect")
+    account
+    |> Collector.collect_coin()
     |> send_reply(message)
 
     LandOfDiscordia.check_and_invite(account)

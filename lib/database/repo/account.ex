@@ -10,6 +10,7 @@ defmodule Database.Repo.Account do
     has_one :account_settings, Database.Repo.AccountSettings
     has_many :coin_instances, Database.Repo.CoinInstance
     has_many :coin_transactions, Database.Repo.CoinTransaction
+    has_many :scrap_transactions, Database.Repo.ScrapTransaction
     has_many :suggestions, Database.Repo.Suggestion
 
     timestamps([type: :utc_datetime])

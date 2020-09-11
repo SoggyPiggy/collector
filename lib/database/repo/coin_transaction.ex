@@ -6,6 +6,7 @@ defmodule Database.Repo.CoinTransaction do
 
   @transaction_reasons [
     "collect",
+    "scrap"
   ]
 
   schema "coin_transactions" do

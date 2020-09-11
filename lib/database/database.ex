@@ -76,6 +76,15 @@ defmodule Database do
     defdelegate last(item, reason), to: Repo.CoinTransaction
   end
 
+  defmodule ScrapTransaction do
+    defdelegate new(item, account, params), to: Repo.ScrapTransaction
+    defdelegate fetch(item, key), to: Repo.ScrapTransaction
+    defdelegate amount(item), to: Repo.ScrapTransaction
+    defdelegate all(), to: Repo.ScrapTransaction
+    defdelegate all(item), to: Repo.ScrapTransaction
+    defdelegate sum(item), to: Repo.ScrapTransaction
+  end
+
   defmodule Suggestion do
     defdelegate new(item, username, content), to: Repo.Suggestion
     defdelegate new(item, params), to: Repo.Suggestion

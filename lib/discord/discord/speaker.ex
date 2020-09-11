@@ -24,33 +24,7 @@ defmodule Discord.Speaker do
   defp send_message(message, id), do: Nostrum.Api.create_message(id, message)
 
   defp embedify(%Database.Repo.Account{} = account) do
-    account =
-      account
-      |> Database.Account.get()
-      |> Database.preload(:coin_instances)
-      |> Database.preload(:coin_transactions)
-      |> Database.preload(:suggestions)
-    discord_user = Nostrum.Api.get_user!(account.discord_id)
-    coins = Database.Account.fetch(account, :coin_instances)
-    coin_count = coins |> Enum.count()
-    collected_coins_count =
-      account
-      |> Database.Account.fetch(:coin_transactions)
-      |> Enum.filter(fn transaction -> transaction.reason == "collect" end)
-      |> Enum.reduce(0, fn transaction, acc -> acc + transaction.amount end)
-    worth_total = Enum.reduce(coins, 0, fn coin, acc -> acc + coin.value end)
-    worth_average = worth_total / coin_count
-
-    %Embed{}
-    |> Embed.put_title("#{discord_user.username}'s Profile")
-    |> Embed.put_description("""
-    **Collection Count**: #{coin_count}
-    **Collection Value**: #{Database.friendly_coin_value(worth_total)}
-    **Collection Average**: #{Database.friendly_coin_value(worth_average)}
-
-    **Coins Collected**: #{collected_coins_count}
-    """)
-    |> Embed.put_thumbnail(Nostrum.Struct.User.avatar_url(discord_user))
+    Discord.Speaker.AccountEmbed.build(account)
   end
   defp embedify(%Database.Repo.CoinInstance{} = coin) do
     %Embed{}

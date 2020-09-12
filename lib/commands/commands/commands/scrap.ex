@@ -15,31 +15,17 @@ defmodule Commands.Command.Scrap do
     args
     |> OptionParser.split()
     |> OptionParser.parse(strict: @command.args_strict, aliases: @command.args_aliases)
-    |> argument_process()
-    |> check_coin(account)
-    |> scrap_coin()
+    |> check_params()
+    |> send_to_handler(account)
     |> send_reply(reply_data)
   end
 
-  def argument_process({_args, [], _errors}), do: {:error, "Coin not provided"}
-  def argument_process({_args, [_ | [_ | _]], _errors}), do: {:error, "Too many base arguments provided"}
-  def argument_process({args, [coin], _errors}), do: argument_process(
-    coin
-    |> Database.CoinInstance.get(),
-    args
-    |> Keyword.get(:estimate, false)
-  )
-  def argument_process(nil, _), do: {:error, "Coin reference is not vaild"}
-  def argument_process(coin, only_estimate), do: {:ok, coin, only_estimate}
+  defp check_params({_params, [], _errors}), do: {:error, "Coin not provided"}
+  defp check_params({_params, [_ | [_ | _]], _errors}), do: {:error, "Too many coin references provided"}
+  defp check_params({params, [coin], _errors}), do: {:ok, coin, params}
 
-  def check_coin({:error, _reason} = error, _account), do: error
-  def check_coin({:ok, coin, _only_estimate} = data, account) do
-    coin
-    |> Database.CoinInstance.owner?(account)
-    |> check_coin(data)
-  end
-  def check_coin(true, data), do: data
-  def check_coin(false, _data), do: {:error, "You can not scrap a coin that is not yours"}
+  defp send_to_handler({:error, _reason} = error, _account), do: error
+  defp send_to_handler({:ok, coin, params}, account), do: Engine.run_scrap(account, coin, params)
 
   def scrap_coin({:error, _reason} = error), do: error
   def scrap_coin({:ok, coin, true}), do: {:ok, (
@@ -63,5 +49,8 @@ defmodule Commands.Command.Scrap do
   end
 
   def send_reply({:error, reason}, {%{discord_id: id}, message}), do: Discord.send("<@#{id}>, #{reason}", :reply, message)
-  def send_reply({:ok, response}, {%{discord_id: id}, message}), do: Discord.send("<@#{id}>, " <> response, :reply, message)
+  def send_reply({:ok, amount, coin}, {%{discord_id: id}, message}),
+    do: Discord.send("<@#{id}>, #{Database.CoinInstance.reference(coin)} will yield roughly #{amount} scrap", :reply, message)
+  def send_reply({:ok, amount, coin, _coin_transaction, _scrap_transaction}, {%{discord_id: id}, message}),
+    do: Discord.send("<@#{id}>, #{Database.CoinInstance.reference(coin)} has been scrapped for #{amount} scrap", :reply, message)
 end

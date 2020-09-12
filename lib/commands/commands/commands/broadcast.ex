@@ -6,7 +6,8 @@ defmodule Commands.Command.Broadcast do
     aliases: ["ecto", "broadcast"],
     examples: [">echo --channel 736021368981946409 --message \"This is one big ol example\""],
     is_public: false,
-    args_strict: [{:channel, :integer}, {:message, :string}]
+    args_strict: [{:channel, :integer}, {:message, :string}],
+    args_aliases: [c: :channel, m: :message]
   }
 
   def module(), do: @command
@@ -14,7 +15,7 @@ defmodule Commands.Command.Broadcast do
   def execute(args, _) do
     args
     |> OptionParser.split()
-    |> OptionParser.parse([strict: @command.args_strict])
+    |> OptionParser.parse([strict: @command.args_strict, aliases: @command.args_aliases])
     |> broadcast()
   end
 

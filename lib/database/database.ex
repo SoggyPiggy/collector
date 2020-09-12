@@ -78,6 +78,7 @@ defmodule Database do
 
   defmodule ScrapTransaction do
     defdelegate new(item, account, params), to: Repo.ScrapTransaction
+    defdelegate get(item), to: Repo.ScrapTransaction
     defdelegate fetch(item, key), to: Repo.ScrapTransaction
     defdelegate amount(item), to: Repo.ScrapTransaction
     defdelegate all(), to: Repo.ScrapTransaction

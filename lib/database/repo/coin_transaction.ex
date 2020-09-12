@@ -43,13 +43,17 @@ defmodule Database.Repo.CoinTransaction do
     )
 
   defp new_adjust_instance({:ok, item}, coin_instance, account), do: new_adjust_instance(item, coin_instance, account)
-  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: 1}, coin_instance, account) do
+  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: 1} = transaction, coin_instance, account) do
     coin_instance
     |> Database.CoinInstance.modify(%{account_id: account.id})
+
+    transaction
   end
-  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: -1}, coin_instance, _account) do
+  defp new_adjust_instance(%Database.Repo.CoinTransaction{amount: -1} = transaction, coin_instance, _account) do
     coin_instance
     |> Database.CoinInstance.modify(%{account_id: nil})
+
+    transaction
   end
 
   def fetch(settings, keys) when is_list(keys) do

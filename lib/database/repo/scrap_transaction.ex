@@ -13,11 +13,11 @@ defmodule Database.Repo.ScrapTransaction do
     timestamps([type: :utc_datetime, updated_at: false])
   end
 
-  def new({:ok, item}, coin_instance, params), do: new(item, coin_instance, params)
-  def new(account, {:ok, item}, params), do: new(account, item, params)
-  def new(account, coin_instance, {:ok, item}), do: new(account, coin_instance, item)
-  def new(account, coin_instance, amount) when is_integer(amount), do: new(account, coin_instance, %{amount: amount})
-  def new(%Database.Repo.Account{} = account, %Database.Repo.CoinInstance{} = coin_instance, params) do
+  def new({:ok, item}, account, params), do: new(item, account, params)
+  def new(coin_instance, {:ok, item}, params), do: new(coin_instance, item, params)
+  def new(coin_instance, account, {:ok, item}), do: new(coin_instance, account, item)
+  def new(coin_instance, account, amount) when is_integer(amount), do: new(account, coin_instance, %{amount: amount})
+  def new(%Database.Repo.CoinInstance{} = coin_instance, %Database.Repo.Account{} = account, params) do
     %Database.Repo.ScrapTransaction{}
     |> Database.add_association(account)
     |> Database.add_association(coin_instance)

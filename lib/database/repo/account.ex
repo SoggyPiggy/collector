@@ -54,6 +54,12 @@ defmodule Database.Repo.Account do
     |> Query.where(^params)
     |> Repo.one()
   end
+  def get(discord_tag) when is_bitstring(discord_tag) do
+    discord_tag
+    |> String.replace(~r/<@!?|>/, "")
+    |> String.to_integer()
+    |> get()
+  end
 
   def all() do
     Database.Repo.Account

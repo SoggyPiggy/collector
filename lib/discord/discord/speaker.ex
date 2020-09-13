@@ -27,6 +27,15 @@ defmodule Discord.Speaker do
   defp embedify(%Database.Repo.Account{} = account) do
     Discord.Speaker.AccountEmbed.build(account)
   end
+  defp embedify(%Commands.Command{} = command) do
+    %Embed{}
+    |> Embed.put_title("Help Menu: " <> command.title)
+    |> Embed.put_description("""
+    #{command.description}
+    **Aliases**: `#{command.aliases |> Enum.join("`, `")}`
+    **Examples**: `#{command.examples |> Enum.join("`, `")}`
+    """)
+  end
   defp embedify(%Database.Repo.CoinInstance{} = coin) do
     %Embed{}
     |> Embed.put_title(Coin.fetch(coin, :name))
@@ -55,6 +64,8 @@ defmodule Discord.Speaker do
     do: "**`#{Changelog.get_version(major_minor)}` #{major_minor.name}**"
   defp embedify_list_item(%Database.Repo.CoinInstance{} = coin),
     do: "#{coin_ref(coin)} #{coin_grade(coin)} #{coin_set(coin)} > #{coin_name(coin)}"
+  defp embedify_list_item(%Commands.Command{} = command),
+    do: "**#{command.title}**: `#{command.aliases |> List.first()}` #{command.description}"
 
   defp coin_ref(coin), do: "`#{Database.CoinInstance.reference(coin)}`"
   defp coin_set(coin), do: Database.Set.structure(coin, :name) |> Enum.join(" > ")

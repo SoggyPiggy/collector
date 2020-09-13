@@ -10,14 +10,30 @@ defmodule Commands.Command.Help do
 
   def module(), do: @command
 
-  def execute(_args, {account, message}) do
-    "__**Help Menu**__\n" <> (
-      account
-      |> Commands.get_appropriate_commands()
-      |> Enum.map(fn command -> command.module() end)
-      |> Enum.map(fn command -> "**#{command.title}**: `#{command.aliases |> List.first()}` #{command.description}" end)
-      |> Enum.join("\n")
-    )
-    |> Discord.send(:direct, message)
+  def execute(args, {account, _message} = reply_data) do
+    commands = Commands.get_appropriate_commands(account)
+
+    args
+    |> OptionParser.split()
+    |> OptionParser.parse(strict: @command.args_strict, aliases: @command.args_aliases)
+    |> check_arguments(commands)
+    |> send_reply(reply_data)
   end
+
+  defp check_arguments({_params, [_ | [_ | _]], _errors}, commands),
+    do: {:ok, commands |> Enum.map(fn command -> command.module() end)}
+  defp check_arguments({_params, [], _errors}, commands),
+    do: {:ok, commands |> Enum.map(fn command -> command.module() end)}
+  defp check_arguments({_params, [cmd], _errors}, commands) do
+    commands
+    |> Commands.find(cmd)
+    |> check_arguments_verify()
+  end
+
+  defp check_arguments_verify(nil), do: {:error, "Command not found"}
+  defp check_arguments_verify(command), do: {:ok, command.module()}
+
+  defp send_reply({:error, reason}, {%{discord_id: id}, message}), do: Discord.send("<@#{id}>, #{reason}", :direct, message)
+  defp send_reply({:ok, %Commands.Command{} = command}, {_account, message}), do: Discord.send("", command, :direct, message)
+  defp send_reply({:ok, commands}, {_account, message}), do: Discord.send("Help Menu", commands, :direct, message)
 end

@@ -52,4 +52,11 @@ defmodule Discord.Speaker do
 
   defp embedify_list_item(%Changelog.MajorMinor{} = major_minor),
     do: "**`#{Changelog.get_version(major_minor)}` #{major_minor.name}**"
+  defp embedify_list_item(%Database.Repo.CoinInstance{} = coin),
+    do: "#{coin_ref(coin)} #{coin_grade(coin)} #{coin_set(coin)} > #{coin_name(coin)}"
+
+  defp coin_ref(coin), do: "`#{Database.CoinInstance.reference(coin)}`"
+  defp coin_set(coin), do: Database.Set.structure(coin, :name) |> Enum.join(" > ")
+  defp coin_name(coin), do: "**#{Database.Coin.fetch(coin, :name)}**"
+  defp coin_grade(coin), do: "`#{Database.CoinInstance.grade(coin) |> String.pad_trailing(10, " ")}`"
 end

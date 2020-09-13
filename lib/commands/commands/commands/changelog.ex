@@ -4,45 +4,36 @@ defmodule Commands.Command.Changelog do
     title: "Patch Notes",
     description: "Check out the latest patch notes to find out whats new",
     aliases: ["patch", "patchnotes", "patch-notes", "whatsnew", "changelog"],
-    examples: [">whatsnew"]
+    examples: [">whatsnew"],
+    args_strict: [{:previous, :integer}, {:list, :boolean}],
+    args_aliases: [prev: :previous, l: :list]
   }
 
   def module(), do: @command
 
-  def execute(_args, data) do
-    Changelog.get_latest()
-    |> parse_log()
-    |> List.flatten()
-    |> Enum.join("\n")
-    |> send_message(data)
+  def execute(args, reply_data) do
+    args
+    |> OptionParser.split()
+    |> OptionParser.parse(strict: @command.args_strict, aliases: @command.args_aliases)
+    |> check_arguments()
+    |> get_embeddable()
+    |> send_reply(reply_data)
   end
 
-  defp send_message(content, {account, message}) do
-    account
-    |> Database.AccountSettings.get()
-    |> Database.AccountSettings.all?([:admin, :admin_enabled])
-    |> direct_send(content, message)
+  defp check_arguments({params, _, _errors}) do
+    {
+      Keyword.get(params, :list, false),
+      Keyword.get(params, :previous, 0)
+    }
+    |> check_arguments_verify()
   end
-  defp direct_send(true, content, message), do: Discord.send(content, :reply, message)
-  defp direct_send(false, content, message), do: Discord.send(content, :direct, message)
 
-  defp parse_log(%{name: name, version: version, patches: patches}),
-    do: ["__**#{name}**__" | parse_patches(patches, version)]
+  defp check_arguments_verify({true, _previous}), do: {:ok, "list"}
+  defp check_arguments_verify({false, previous}), do: {:ok, previous}
 
-  defp parse_patches([], _version), do: []
-  defp parse_patches([patch], version), do: [parse_patch(patch, version)]
-  defp parse_patches([patch | tail], version), do: [parse_patch(patch, version) | parse_patches(tail, version)]
+  defp get_embeddable({:ok, "list"}), do: {:ok, Changelog.list()}
+  defp get_embeddable({:ok, previous}), do: {:ok, Changelog.get_previous(previous)}
 
-  defp parse_patch(%{version: patch_version, notes: sections}, version),
-    do: ["`#{version}.#{patch_version}`" | parse_sections(sections)]
-
-  defp parse_sections([]), do: []
-  defp parse_sections([{_title, []}]), do: []
-  defp parse_sections([{_title, []} | tail]), do: [parse_sections(tail)]
-  defp parse_sections([{title, notes}]), do: ["**#{title}**" | [parse_notes(notes)]]
-  defp parse_sections([{title, notes} | tail]), do: ["**#{title}**" | [parse_notes(notes) | [parse_sections(tail)]]]
-
-  defp parse_notes([]), do: []
-  defp parse_notes([note]), do: ["- #{note}"]
-  defp parse_notes([note | tail]), do: ["- #{note}" | parse_notes(tail)]
+  defp send_reply({:ok, embedible}, {_account, message}),
+    do: Discord.send("", embedible, :reply, message)
 end

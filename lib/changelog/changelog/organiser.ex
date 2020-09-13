@@ -6,7 +6,13 @@ defmodule Changelog.Organiser do
   ]
 
   def get_latest(), do: get_log(0)
+
   def get_previous(num), do: get_log(num)
+
+  def list(), do: Enum.map(@versions, &get_log_module/1)
+
+  def get_version(%Changelog.MajorMinor{} = patch \\ get_latest()),
+    do: "#{patch.version}.X"
 
   defp get_log(num) do
     @versions

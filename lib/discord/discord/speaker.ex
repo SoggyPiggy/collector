@@ -37,4 +37,19 @@ defmodule Discord.Speaker do
     |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
     |> Embed.put_footer(CoinInstance.reference(coin))
   end
+  defp embedify(%Changelog.MajorMinor{} = change_log) do
+    Discord.Speaker.ChangeLogEmbed.build(change_log)
+  end
+  defp embedify(list) when is_list(list) do
+    content =
+      list
+      |> Enum.map(fn item -> embedify_list_item(item) end)
+      |> Enum.join("\n")
+
+    %Embed{}
+    |> Embed.put_description(content)
+  end
+
+  defp embedify_list_item(%Changelog.MajorMinor{} = major_minor),
+    do: "**`#{Changelog.get_version(major_minor)}` #{major_minor.name}**"
 end

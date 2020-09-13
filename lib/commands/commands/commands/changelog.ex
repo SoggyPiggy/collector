@@ -34,6 +34,8 @@ defmodule Commands.Command.Changelog do
   defp get_embeddable({:ok, :list}), do: {:ok, Changelog.list()}
   defp get_embeddable({:ok, previous}), do: {:ok, Changelog.get_previous(previous)}
 
-  defp send_reply({:ok, embedible}, {_account, message}),
-    do: Discord.send("", embedible, :reply, message)
+  defp send_reply({:ok, %Changelog.MajorMinor{} = change_log}, {_account, message}),
+    do: Discord.send("", change_log, :reply, message)
+  defp send_reply({:ok, change_logs}, {_account, message}),
+    do: Discord.send("Change Logs", change_logs, :reply, message)
 end

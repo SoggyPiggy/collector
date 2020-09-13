@@ -3,11 +3,12 @@ defmodule Discord.Speaker do
   alias Database.{Coin, CoinInstance, Set}
 
   def send(message, {:ok, item}, type, data), do: send(message, item, type, data)
+  def send(title, embed_item, type, data) when is_list(embed_item) do
+    [embed: embedify(embed_item) |> Embed.put_title(title)]
+    |> Discord.send(type, data)
+  end
   def send(message, embed_item, type, data) do
-    [
-      content: message,
-      embed: embedify(embed_item)
-    ]
+    [content: message, embed: embedify(embed_item)]
     |> Discord.send(type, data)
   end
   def send(message, type, data) when is_bitstring(message), do: send(%{content: message}, type, data)

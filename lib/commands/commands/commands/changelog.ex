@@ -28,10 +28,10 @@ defmodule Commands.Command.Changelog do
     |> check_arguments_verify()
   end
 
-  defp check_arguments_verify({true, _previous}), do: {:ok, "list"}
+  defp check_arguments_verify({true, _previous}), do: {:ok, :list}
   defp check_arguments_verify({false, previous}), do: {:ok, previous}
 
-  defp get_embeddable({:ok, "list"}), do: {:ok, Changelog.list()}
+  defp get_embeddable({:ok, :list}), do: {:ok, Changelog.list()}
   defp get_embeddable({:ok, previous}), do: {:ok, Changelog.get_previous(previous)}
 
   defp send_reply({:ok, embedible}, {_account, message}),

@@ -31,7 +31,7 @@ defmodule Engine.CoinHandler.Scrap do
     amount =
       coin
       |> coin_base_scrap_amount()
-      |> (_add_random = fn amount -> Enum.random(-3..3) + amount end).()
+      |> (_add_random = fn amount -> Enum.random(-30..30) + amount end).()
     coin_transaction = Database.CoinTransaction.new(coin, account, %{reason: "scrap", amount: -1}) |> Database.CoinTransaction.get()
     scrap_transaction = Database.ScrapTransaction.new(coin, account, %{reason: "scrap", amount: amount}) |> Database.ScrapTransaction.get()
     {:ok, amount, coin, coin_transaction, scrap_transaction}
@@ -40,7 +40,7 @@ defmodule Engine.CoinHandler.Scrap do
   defp coin_base_scrap_amount(coin) do
     coin
     |> Database.CoinInstance.fetch(:condition)
-    |> (fn condition -> condition * 50 end).()
-    |> round()
+    |> (fn condition -> condition * 500 end).()
+    |> ceil()
   end
 end

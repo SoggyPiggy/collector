@@ -4,8 +4,14 @@ defmodule Database.Repo.ScrapTransaction do
   require Query
   use Ecto.Schema
 
+  @transaction_reasons [
+    "scrap",
+    "repair"
+  ]
+
   schema "scrap_transactions" do
     field :amount, :integer, default: 1
+    field :reason, :string
 
     belongs_to :account, Database.Repo.Account
     belongs_to :coin_instance, Database.Repo.CoinInstance
@@ -21,8 +27,9 @@ defmodule Database.Repo.ScrapTransaction do
     %Database.Repo.ScrapTransaction{}
     |> Database.add_association(account)
     |> Database.add_association(coin_instance)
-    |> Changeset.cast(params, [:amount])
+    |> Changeset.cast(params, [:amount, :reason])
     |> Changeset.validate_required([:amount])
+    |> Changeset.validate_inclusion(:reason, @transaction_reasons)
     |> Repo.insert()
   end
   def new(account, coin_instance, params),

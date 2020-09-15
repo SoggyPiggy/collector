@@ -4,9 +4,9 @@ defmodule Commands.Command.Scrap do
     title: "Scrap Coin",
     description: "Breaks down the coin into scrap metal",
     aliases: ["scr", "scrap"],
-    examples: [">scrap 001A", "scr 21 --estimate"],
-    args_strict: [{:estimate, :boolean}],
-    args_aliases: [e: :estimate]
+    examples: [">scrap 001A", "scr 21 --dry-run"],
+    args_strict: [{:dry_run, :boolean}],
+    args_aliases: [d: :dry_run]
   }
 
   def module(), do: @command

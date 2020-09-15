@@ -3,7 +3,7 @@ defmodule Engine.CoinHandler.Scrap do
     coin_instance
     |> check_coin_instance()
     |> check_coin_owner(account)
-    |> execute(Keyword.get(params, :estimate, false))
+    |> execute(Keyword.get(params, :dry_run, false))
   end
 
   defp check_coin_instance(coin_instance) do
@@ -25,9 +25,9 @@ defmodule Engine.CoinHandler.Scrap do
   defp check_coin_owner_verify(false, _data), do: {:error, "You do not own that coin"}
   defp check_coin_owner_verify(true, {coin, account}), do: {:ok, coin, account}
 
-  defp execute({:error, _reason} = error, _estimate), do: error
-  defp execute({:ok, coin, _account}, true = _estimate), do: {:ok, coin_base_scrap_amount(coin), coin}
-  defp execute({:ok, coin, account}, false = _estimate) do
+  defp execute({:error, _reason} = error, _dry_run), do: error
+  defp execute({:ok, coin, _account}, true = _dry_run), do: {:ok, coin_base_scrap_amount(coin), coin}
+  defp execute({:ok, coin, account}, false = _dry_run) do
     amount =
       coin
       |> coin_base_scrap_amount()

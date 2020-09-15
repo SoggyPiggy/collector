@@ -10,6 +10,7 @@ defmodule Commands.Command do
     for_registered: true,
     for_unregistered: false,
     args_strict: [],
-    args_aliases: []
+    args_aliases: [],
+    args_descriptions: []
   )
 end

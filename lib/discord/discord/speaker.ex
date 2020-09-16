@@ -47,6 +47,14 @@ defmodule Discord.Speaker do
     |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
     |> Embed.put_footer(CoinInstance.reference(coin))
   end
+  defp embedify(%Database.Repo.ScrapTransaction{} = transaction) do
+    %Embed{}
+    |> Embed.put_title("#{Database.CoinInstance.reference(transaction)} Repaired")
+    |> Embed.put_description("""
+    #{Database.ScrapTransaction.fetch(transaction, :amount) |> abs()} scrap was used.
+    Coin is now #{Database.CoinInstance.grade(transaction)} and is valued at #{Database.CoinInstance.value_raw(transaction) |> Database.friendly_coin_value()}
+    """)
+  end
   defp embedify(%Changelog.MajorMinor{} = change_log) do
     Discord.Speaker.ChangeLogEmbed.build(change_log)
   end

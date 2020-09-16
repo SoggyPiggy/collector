@@ -9,6 +9,7 @@ defmodule Commands.Organiser do
     Command.Collection,
     Command.ViewCoin,
     Command.Scrap,
+    Command.Repair,
     Command.Suggest,
     Command.Changelog,
     Command.Seed,

@@ -83,16 +83,16 @@ defmodule Database.Repo.CoinInstance do
     |> Database.Repo.all()
   end
 
-  def fetch(settings, keys) when is_list(keys) do
+  def fetch(coin_instance, keys) when is_list(keys) do
     keys
     |> Enum.map(fn key ->
-      settings
+      coin_instance
       |> get()
       |> fetch(key)
     end)
   end
-  def fetch(settings, key) when is_atom(key) do
-    settings
+  def fetch(coin_instance, key) when is_atom(key) do
+    coin_instance
     |> get()
     |> Map.get(key)
   end

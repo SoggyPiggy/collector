@@ -51,6 +51,14 @@ defmodule Discord.Speaker do
     Coin is now #{Database.CoinInstance.grade(transaction)} and is valued at #{Database.CoinInstance.value_raw(transaction) |> Database.friendly_coin_value()}
     """)
   end
+  defp embedify(%Database.Repo.ScrapTransaction{reason: "scrap"} = transaction) do
+    %Embed{}
+    |> Embed.put_title("#{Database.CoinInstance.reference(transaction)} Scrapped")
+    |> Embed.put_description("""
+    #{Database.ScrapTransaction.fetch(transaction, :amount) |> abs()} scrap was gained.
+    The coin has been discarded from your inventory.
+    """)
+  end
   defp embedify(list) when is_list(list) do
     content =
       list

@@ -58,6 +58,11 @@ defmodule Database.Repo.Coin do
     |> Database.preload(:coin)
     |> Map.get(:coin)
   end
+  def get(%Database.Repo.ScrapTransaction{} = scrap_transaction) do
+    scrap_transaction
+    |> Database.CoinInstance.get()
+    |> get()
+  end
   def get(%Database.Repo.CoinTransaction{} = coin_transaction) do
     coin_transaction
     |> Database.CoinInstance.get()

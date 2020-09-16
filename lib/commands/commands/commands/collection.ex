@@ -4,7 +4,7 @@ defmodule Commands.Command.Collection do
     title: "Collection",
     description: "View your collection of coins",
     aliases: ["c", "collection"],
-    examples: [">c"],
+    examples: ["collection"],
     # args_strict: [{:page, :integer}],
     # args_aliases: [p: :page]
   }

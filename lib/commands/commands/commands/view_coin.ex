@@ -3,8 +3,8 @@ defmodule Commands.Command.ViewCoin do
     id: :view_coin,
     title: "View",
     description: "View a coin using it's reference ID",
-    aliases: ["v", "view", "viewcoin", "view-coin"],
-    examples: [">v 00f6"]
+    aliases: ["v", "view", "view-coin", "viewcoin"],
+    examples: ["view 00F6", "v f6"]
   }
 
   def module(), do: @command

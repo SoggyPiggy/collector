@@ -3,10 +3,14 @@ defmodule Commands.Command.Changelog do
     id: :patch_notes,
     title: "Patch Notes",
     description: "Check out the latest patch notes to find out whats new",
-    aliases: ["patch", "patchnotes", "patch-notes", "whatsnew", "changelog"],
-    examples: [">whatsnew"],
-    args_strict: [{:previous, :integer}, {:list, :boolean}],
-    args_aliases: [prev: :previous, l: :list]
+    aliases: ["patch", "patch-notes", "patchnotes"],
+    examples: ["patch", "patchnotes --previous 1", "patch -p 1", "patch --list", "patch -l"],
+    args_strict: [previous: :integer, list: :boolean],
+    args_aliases: [p: :previous, l: :list],
+    args_descriptions: [
+      previous: "NUMBER | The number of \"pages\" of the changelogs to go back",
+      list: "BOOLEAN | If used, will list all the minor patches of the bot"
+    ]
   }
 
   def module(), do: @command

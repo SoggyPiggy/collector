@@ -6,7 +6,7 @@ defmodule Commands.Command.Suggest do
     title: "Suggest",
     description: "Make any suggestion for the bot",
     aliases: ["suggest", "suggestion"],
-    examples: [">suggest There should be coins for pickles"]
+    examples: ["suggest There should be coins for pickles"]
   }
 
   def module(), do: @command

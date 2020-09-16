@@ -3,8 +3,8 @@ defmodule Commands.Command.Collect do
     id: :collect,
     title: "Collect",
     description: "Get your daily coin. Resets at 8pm EST",
-    aliases: ["collect"],
-    examples: [">collect"]
+    aliases: ["collect", "gimme"],
+    examples: ["collect"]
   }
 
   def module(), do: @command

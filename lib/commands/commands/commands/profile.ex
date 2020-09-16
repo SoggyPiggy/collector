@@ -4,7 +4,7 @@ defmodule Commands.Command.Profile do
     title: "Profile",
     description: "Shows a user's profile card",
     aliases: ["p", "profile", "stats"],
-    examples: [">p <@468616309521776659>"],
+    examples: ["profile", "p <@468616309521776659>"],
     is_public: false,
   }
 

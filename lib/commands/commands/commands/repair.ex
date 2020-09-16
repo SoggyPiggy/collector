@@ -4,12 +4,12 @@ defmodule Commands.Command.Repair do
     title: "Repair Coin",
     description: "Uses Scrap to repair a coin",
     aliases: ["rpr", "repair"],
-    examples: [">rpr 001B -s 2500", "repair 22 --scrap 100 --dry-run"],
+    examples: ["repair 22 --scrap 100 --dry-run", "rpr 22 -s 100 -d", "rpr 22 -s 100"],
     args_strict: [scrap: :integer, dry_run: :boolean],
     args_aliases: [s: :scrap, d: :dry_run],
     args_descriptions: [
-      scrap: "The amount of scrap used to repair the coin (REQUIRED)",
-      dry_run: "If used the action will not be saved and will output relavant information"
+      scrap: "NUMBER | The amount of scrap used to repair the coin (REQUIRED)",
+      dry_run: "BOOLEAN | If used the action will not be saved and will output relavant information"
     ]
   }
 

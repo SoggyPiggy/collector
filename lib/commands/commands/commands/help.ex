@@ -4,7 +4,7 @@ defmodule Commands.Command.Help do
     title: "Help",
     description: "Displays helpful information",
     aliases: ["h", "help"],
-    examples: [">help"],
+    examples: ["help", "h h"],
     for_unregistered: true,
   }
 

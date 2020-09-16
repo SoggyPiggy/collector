@@ -27,6 +27,9 @@ defmodule Discord.Speaker do
   defp embedify(%Database.Repo.Account{} = account) do
     Discord.Speaker.AccountEmbed.build(account)
   end
+  defp embedify(%Changelog.MajorMinor{} = change_log) do
+    Discord.Speaker.ChangeLogEmbed.build(change_log)
+  end
   defp embedify(%Commands.Command{} = command) do
     %Embed{}
     |> Embed.put_title("Help Menu: " <> command.title)
@@ -54,9 +57,6 @@ defmodule Discord.Speaker do
     #{Database.ScrapTransaction.fetch(transaction, :amount) |> abs()} scrap was used.
     Coin is now #{Database.CoinInstance.grade(transaction)} and is valued at #{Database.CoinInstance.value_raw(transaction) |> Database.friendly_coin_value()}
     """)
-  end
-  defp embedify(%Changelog.MajorMinor{} = change_log) do
-    Discord.Speaker.ChangeLogEmbed.build(change_log)
   end
   defp embedify(list) when is_list(list) do
     content =

@@ -63,8 +63,8 @@ defmodule Database do
     defdelegate owned?(item), to: Repo.CoinInstance
     defdelegate owner?(item, owner), to: Repo.CoinInstance
     defdelegate owner(item, owner), to: Repo.CoinInstance
+    defdelegate value_raw(item), to: Repo.CoinInstance
     defdelegate update_value(item), to: Repo.CoinInstance
-    defdelegate update_value(item, coin), to: Repo.CoinInstance
   end
 
   defmodule CoinTransaction do

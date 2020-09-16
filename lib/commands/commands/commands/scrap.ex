@@ -30,6 +30,6 @@ defmodule Commands.Command.Scrap do
   def send_reply({:error, reason}, {%{discord_id: id}, message}), do: Discord.send("<@#{id}>, #{reason}", :reply, message)
   def send_reply({:ok, amount, coin}, {%{discord_id: id}, message}),
     do: Discord.send("<@#{id}>, #{Database.CoinInstance.reference(coin)} will yield roughly #{amount} scrap", :reply, message)
-  def send_reply({:ok, amount, coin, _coin_transaction, _scrap_transaction}, {%{discord_id: id}, message}),
-    do: Discord.send("<@#{id}>, #{Database.CoinInstance.reference(coin)} has been scrapped for #{amount} scrap", :reply, message)
+  def send_reply({:ok, _amount, _coin, _coin_transaction, scrap_transaction}, {%{discord_id: id}, message}),
+    do: Discord.send("<@#{id}>", scrap_transaction, :reply, message)
 end

@@ -49,6 +49,11 @@ defmodule Database.Repo.CoinInstance do
     |> Database.preload(:coin_instance)
     |> Map.get(:coin_instance)
   end
+  def get(%Database.Repo.ScrapTransaction{} = coin_transaction) do
+    coin_transaction
+    |> Database.preload(:coin_instance)
+    |> Map.get(:coin_instance)
+  end
   def get(id) when is_integer(id) do
     Database.Repo.CoinInstance
     |> Database.Repo.get(id)

@@ -27,27 +27,6 @@ defmodule Commands.Command.Scrap do
   defp send_to_handler({:error, _reason} = error, _account), do: error
   defp send_to_handler({:ok, coin, params}, account), do: Engine.run_scrap(account, coin, params)
 
-  def scrap_coin({:error, _reason} = error), do: error
-  def scrap_coin({:ok, coin, true}), do: {:ok, (
-    coin
-    |> Database.CoinInstance.reference()
-  ) <> " will yield roughly " <> (
-    coin
-    |> Collector.scrap_coin_estimate()
-    |> Integer.to_string()
-  ) <> " scrap"}
-  def scrap_coin({:ok, coin, false}) do
-    {new_coin, scrap_transaction} = Collector.scrap_coin(coin)
-    {:ok, (
-      new_coin
-      |> Database.CoinInstance.reference()
-    ) <> " has been scrapped for " <> (
-      scrap_transaction
-      |> Database.ScrapTransaction.amount()
-      |> Integer.to_string()
-    ) <> " scrap"}
-  end
-
   def send_reply({:error, reason}, {%{discord_id: id}, message}), do: Discord.send("<@#{id}>, #{reason}", :reply, message)
   def send_reply({:ok, amount, coin}, {%{discord_id: id}, message}),
     do: Discord.send("<@#{id}>, #{Database.CoinInstance.reference(coin)} will yield roughly #{amount} scrap", :reply, message)

@@ -24,21 +24,14 @@ defmodule Discord.Speaker do
 
   defp send_message(message, id), do: Nostrum.Api.create_message(id, message)
 
-  defp embedify(%Database.Repo.Account{} = account) do
-    Discord.Speaker.AccountEmbed.build(account)
-  end
-  defp embedify(%Changelog.MajorMinor{} = change_log) do
-    Discord.Speaker.ChangeLogEmbed.build(change_log)
-  end
-  defp embedify(%Commands.Command{} = command) do
-    %Embed{}
-    |> Embed.put_title("Help Menu: " <> command.title)
-    |> Embed.put_description("""
-    #{command.description}
-    **Aliases**: `#{command.aliases |> Enum.join("`, `")}`
-    **Examples**: `#{command.examples |> Enum.join("`, `")}`
-    """)
-  end
+  defp embedify(%Database.Repo.Account{} = account),
+    do: Discord.Speaker.AccountEmbed.build(account)
+  defp embedify(%Commands.Command{} = command),
+    do: Discord.Speaker.CommandEmbed.build(command)
+  defp embedify(%Changelog.MajorMinor{} = change_log),
+    do: Discord.Speaker.ChangeLogEmbed.build(change_log)
+  defp embedify(%Database.Repo.CoinTransaction{} = coin_transaction),
+    do: coin_transaction |> Database.CoinInstance.get() |> embedify()
   defp embedify(%Database.Repo.CoinInstance{} = coin) do
     %Embed{}
     |> Embed.put_title(Coin.fetch(coin, :name))

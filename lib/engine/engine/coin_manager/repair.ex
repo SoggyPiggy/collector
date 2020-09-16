@@ -79,8 +79,8 @@ defmodule Engine.CoinHandler.Repair do
   defp repair_calculate_prep(condition, scrap),
     do: {floor(condition * 100), scrap, (condition * 100) - floor(condition * 100)}
 
-  defp repair_calculate_step({condition, scrap, remaining}) when condition >= @repair_ceiling * 100,
-    do: {condition, scrap, remaining}
+  defp repair_calculate_step({condition, scrap, _remaining}) when condition >= @repair_ceiling * 100,
+    do: {condition, scrap, 0}
   defp repair_calculate_step({condition, 0, remaining}),
     do: {condition, 0, remaining}
   defp repair_calculate_step({condition, scrap, remaining}) when scrap >= condition,

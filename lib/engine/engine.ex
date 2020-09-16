@@ -8,4 +8,5 @@ defmodule Engine do
 
   defdelegate run_collect(account), to: CoinHandler.Collect, as: :run
   defdelegate run_scrap(account, coin_instance, params), to: CoinHandler.Scrap, as: :run
+  defdelegate run_repair(account, coin_instance, params), to: CoinHandler.Repair, as: :run
 end

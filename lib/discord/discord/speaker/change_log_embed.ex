@@ -19,7 +19,7 @@ defmodule Discord.Speaker.ChangeLogEmbed do
   defp get_notes(patch) do
     patch.notes
     |> Enum.map(fn {title, notes} -> (
-      "**#{title}**"
+      "**#{title}**\n"
       ) <> (
         notes
         |> Enum.map(fn note -> "- #{note}" end)

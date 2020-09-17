@@ -3,6 +3,7 @@ defmodule Commands.Organiser do
 
   @commands [
     Command.Help,
+    Command.Guide,
     Command.Registry,
     Command.Profile,
     Command.Collect,

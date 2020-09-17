@@ -56,11 +56,11 @@ defmodule Discord.Speaker.AccountEmbed do
     scrap_current: Enum.reduce(account.scrap_transactions, 0, fn scrap, acc -> acc + scrap.amount end),
     scrap_used:
       account.scrap_transactions
-      |> Enum.filter(fn scrap -> scrap.amount < 0 end)
+      |> Enum.filter(fn scrap -> scrap.reason == "repair" end)
       |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end),
     scrap_total:
       account.scrap_transactions
-      |> Enum.filter(fn scrap -> scrap.amount > 0 end)
+      |> Enum.filter(fn scrap -> scrap.reason == "scrap" end)
       |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end)
   }
 

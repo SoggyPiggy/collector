@@ -1,6 +1,7 @@
 defmodule Changelog.Organiser do
   alias Changelog.Change
   @versions [
+    Change.Version_0_3_X,
     Change.Version_0_2_X,
     Change.Version_0_1_X
   ]

@@ -2,7 +2,7 @@ defmodule Commands.Command.Help do
   @command %Commands.Command{
     id: :help,
     title: "Help",
-    description: "Displays helpful information",
+    description: "Displays a list of commands, or information about a command",
     aliases: ["h", "help"],
     examples: ["help", "h h"],
     for_unregistered: true,

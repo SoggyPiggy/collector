@@ -198,19 +198,28 @@ defmodule Database.Repo.CoinInstance do
     |> modify(%{account_id: nil})
   end
 
-
-  def value_raw(coin_instance) do
-    (
-      coin_instance
-      |> fetch(:condition)
-    ) * (
-      coin_instance
-      |> Database.Coin.get()
-      |> Database.Coin.fetch(:value)
-    ) * (
-      if coin_instance |> fetch(:is_altered), do: 0.8, else: 1
-    )
+  def value_raw(%Database.Repo.CoinInstance{} = coin_instance) do
+    coin_instance
+    |> Database.Coin.get()
+    |> Database.Coin.fetch(:value)
+    |> value_raw_condition_modifier(coin_instance.condition)
+    |> value_raw_altered_modifier(coin_instance.is_altered)
   end
+  def value_raw(coin_instance) do
+    coin_instance
+    |> Database.CoinInstance.get()
+    |> value_raw()
+  end
+
+  defp value_raw_condition_modifier(value, 0), do: value * 1.5
+  defp value_raw_condition_modifier(value, condition), do: (
+    value * 0.1
+  ) * (
+    value * 0.9 * condition
+  )
+
+  defp value_raw_altered_modifier(value, true), do: value * 0.8
+  defp value_raw_altered_modifier(value, _), do: value
 
   def update_value(coin_instance) do
     coin_instance

@@ -19,6 +19,8 @@ defmodule Discord.Speaker.AccountEmbed do
     **Collection Unique**: #{data.coin_instances_unique_count}
     **Collection Value**: #{data.collection_value |> friendly_value()}
     **Collection Avg Value**: #{build_embed_average_worth(data.collection_value, data.coin_instances_count)}
+    **Collection MVC**: #{data.most_value_coin}
+    **Collection LVC**: #{data.least_value_coin}
 
     **Coins Collected**: #{data.coin_collected_count}
     **Coins Scrapped**: #{data.coin_scrapped_count}
@@ -61,10 +63,19 @@ defmodule Discord.Speaker.AccountEmbed do
     scrap_total:
       account.scrap_transactions
       |> Enum.filter(fn scrap -> scrap.reason == "scrap" end)
-      |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end)
+      |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end),
+    most_value_coin:
+      account.coin_instances
+      |> IO.inspect()
+      |> find_most_valuable()
+      |> format_single_coin(),
+    least_value_coin:
+      account.coin_instances
+      |> find_least_valuable()
+      |> format_single_coin(),
   }
 
-  def preload_account_info(account) do
+  defp preload_account_info(account) do
     account
     |> Database.Account.get()
     |> Database.preload(:coin_instances)
@@ -72,4 +83,27 @@ defmodule Discord.Speaker.AccountEmbed do
     |> Database.preload(:scrap_transactions)
     |> Database.preload(:suggestions)
   end
+
+  defp find_most_valuable([]), do: nil
+  defp find_most_valuable([coin]), do: coin
+  defp find_most_valuable([coin | tail]), do: find_most_valuable(coin, tail)
+  defp find_most_valuable(coin, []), do: coin
+  defp find_most_valuable(old, [new | tail]) do
+    if new.value >= old.value do new else old end
+    |> find_most_valuable(tail)
+  end
+
+  defp find_least_valuable([]), do: nil
+  defp find_least_valuable([coin]), do: coin
+  defp find_least_valuable([coin | tail]), do: find_least_valuable(coin, tail)
+  defp find_least_valuable(coin, []), do: coin
+  defp find_least_valuable(old, [new | tail]) do
+    if new.value <= old.value do new else old end
+    |> find_least_valuable(tail)
+  end
+
+  defp format_single_coin(nil),
+    do: ""
+  defp format_single_coin(coin),
+    do: "#{Database.friendly_coin_value(coin)} `#{Database.CoinInstance.reference(coin)}` #{Database.CoinInstance.fetch(coin, :name)}"
 end

@@ -105,5 +105,5 @@ defmodule Discord.Speaker.AccountEmbed do
   defp format_single_coin(nil),
     do: ""
   defp format_single_coin(coin),
-    do: "#{Database.friendly_coin_value(coin)} `#{Database.CoinInstance.reference(coin)}` #{Database.CoinInstance.fetch(coin, :name)}"
+    do: "#{Database.friendly_coin_value(coin)} `#{Database.CoinInstance.reference(coin)}` #{Database.Coin.fetch(coin, :name)}"
 end

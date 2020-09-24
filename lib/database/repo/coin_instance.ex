@@ -204,6 +204,8 @@ defmodule Database.Repo.CoinInstance do
     |> Database.Coin.fetch(:value)
     |> value_raw_condition_modifier(coin_instance.condition)
     |> value_raw_altered_modifier(coin_instance.is_altered)
+    |> value_raw_circulation_modifier(Database.Coin.fetch(coin_instance, :in_circulation))
+    |> value_raw_error_modifier(Database.Coin.fetch(coin_instance, :is_error))
   end
   def value_raw(coin_instance) do
     coin_instance
@@ -220,6 +222,12 @@ defmodule Database.Repo.CoinInstance do
 
   defp value_raw_altered_modifier(value, true), do: value * 0.8
   defp value_raw_altered_modifier(value, _), do: value
+
+  defp value_raw_circulation_modifier(value, false), do: value * 1.2
+  defp value_raw_circulation_modifier(value, _), do: value
+
+  defp value_raw_error_modifier(value, true), do: value * 1.8
+  defp value_raw_error_modifier(value, _), do: value
 
   def update_value(coin_instance) do
     coin_instance

@@ -8,6 +8,7 @@ defmodule Commands.Organiser do
     Command.Profile,
     Command.Collect,
     Command.Collection,
+    Command.Sets,
     Command.ViewCoin,
     Command.Scrap,
     Command.Repair,

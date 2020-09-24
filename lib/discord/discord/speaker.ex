@@ -43,6 +43,17 @@ defmodule Discord.Speaker do
     |> Embed.put_image(Collector.get_asset_url(coin, ".png"))
     |> Embed.put_footer(CoinInstance.reference(coin))
   end
+  defp embedify(%Database.Repo.Set{} = set) do
+    %Embed{}
+    |> Embed.put_title(Coin.fetch(set, :name))
+    |> Embed.put_author(
+      set
+      |> Set.structure(:name)
+      |> List.delete_at(-1)
+      |> Enum.join(" > "), nil, nil)
+    |> Embed.put_description("""
+    """)
+  end
   defp embedify(%Database.Repo.ScrapTransaction{reason: "repair"} = transaction) do
     %Embed{}
     |> Embed.put_title("#{Database.CoinInstance.reference(transaction)} Repaired")

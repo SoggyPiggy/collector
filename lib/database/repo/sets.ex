@@ -43,10 +43,10 @@ defmodule Database.Repo.Set do
     Database.Repo.Set
     |> Database.Repo.get(id)
   end
-  def get(name) when is_bitstring(name) do
-    Database.Repo.Set
-    |> Query.where(name: ^name)
-    |> Repo.one()
+  def get(reference) when is_bitstring(reference) do
+    reference
+    |> String.to_integer(36)
+    |> get()
   end
   def get(params) when is_list(params) do
     Database.Repo.Coin
@@ -98,6 +98,15 @@ defmodule Database.Repo.Set do
     |> get()
     |> Changeset.cast(params, @modifiable)
     |> Repo.update()
+  end
+
+  def reference({:ok, item}), do: reference(item)
+  def reference(set) do
+    set
+    |> get()
+    |> Map.get(:id)
+    |> Integer.to_string(36)
+    |> String.pad_leading(2, "0")
   end
 
   def structure(item, key, tail \\ [])

@@ -113,4 +113,17 @@ defmodule Database.Repo.Set do
     |> get()
     |> structure(key, tail)
   end
+
+  def has_coin(%Database.Repo.Set{} = set) do
+    Database.Repo.Coin
+    |> Ecto.Query.where([set_id: ^set.id])
+    |> Ecto.Query.first()
+    |> Database.Repo.one()
+    |> (fn coin -> coin != nil end).()
+  end
+  def has_coin(set) do
+    set
+    |> get()
+    |> has_coin()
+  end
 end

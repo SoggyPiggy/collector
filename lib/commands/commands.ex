@@ -11,4 +11,6 @@ defmodule Commands do
   defdelegate commands_registered(), to: Organiser
   defdelegate commands_unregistered(), to: Organiser
   defdelegate get_appropriate_commands(account), to: Organiser
+
+  defdelegate generate_command(name), to: Commands.Generator, as: :new
 end

@@ -32,6 +32,7 @@ defmodule Database do
     defdelegate all(params), to: Repo.Set
     defdelegate fetch(item, key), to: Repo.Set
     defdelegate modify(set, params), to: Repo.Set
+    defdelegate reference(item), to: Repo.CoinInstance
     defdelegate structure(item, key), to: Repo.Set
     defdelegate has_coin(item), to: Repo.Set
   end

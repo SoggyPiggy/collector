@@ -73,6 +73,8 @@ defmodule Discord.Speaker do
     do: "**`#{Changelog.get_version(major_minor)}` #{major_minor.name}**"
   defp embedify_list_item(%Database.Repo.CoinInstance{} = coin),
     do: "#{coin_ref(coin)} #{coin_grade(coin)} #{coin_set(coin)} > #{coin_name(coin)}"
+  defp embedify_list_item(%Database.Repo.Set{} = set),
+    do: Database.Set.structure(set, :name) |> Enum.join(" > ")
   defp embedify_list_item(%Commands.Command{} = command),
     do: "**#{command.title}**: `#{command.aliases |> List.first()}` #{command.description}"
 

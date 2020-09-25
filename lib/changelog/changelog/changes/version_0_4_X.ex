@@ -4,6 +4,14 @@ defmodule Changelog.Change.Version_0_4_X do
     name: "Big PP",
     patches: [
       %Changelog.Patch{
+        version: "2",
+        notes: [
+          {"Changed", [
+            "Fuzzy search is applied to commands that get other users"
+          ]},
+        ]
+      },
+      %Changelog.Patch{
         version: "1",
         notes: [
           {"Fixed", [

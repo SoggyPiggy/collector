@@ -6,6 +6,7 @@ defmodule Commands.Organiser do
     Command.Guide,
     Command.Registry,
     Command.Profile,
+    Command.PpCompare,
     Command.Collect,
     Command.Collection,
     Command.Sets,

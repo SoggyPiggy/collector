@@ -30,6 +30,8 @@ defmodule Discord.Speaker do
     do: Discord.Speaker.CommandEmbed.build(command)
   defp embedify(%Changelog.MajorMinor{} = change_log),
     do: Discord.Speaker.ChangeLogEmbed.build(change_log)
+  defp embedify({%Database.Repo.Account{}, %Database.Repo.Account{}} = accounts),
+    do: Discord.Speaker.AccountCompareEmbed.build(accounts)
   defp embedify(%Database.Repo.CoinTransaction{} = coin_transaction),
     do: coin_transaction |> Database.CoinInstance.get() |> embedify()
   defp embedify(%Database.Repo.CoinInstance{} = coin) do

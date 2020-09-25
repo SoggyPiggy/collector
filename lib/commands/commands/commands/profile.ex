@@ -17,7 +17,7 @@ defmodule Commands.Command.Profile do
     |> send_reply(reply_data)
   end
 
-  defp check_arguments({_params, [_ | [_ | _]], _errors}, _account), do: {:error, "Too many users given"}
+  defp check_arguments({_params, [_ | [_ | _]], _errors}, _account), do: {:error, "Too many users given, but if you want to compare use pp compare command"}
   defp check_arguments({_params, [], _errors}, account) do
     {:ok, account}
     |> check_arguments_verify()
@@ -32,7 +32,7 @@ defmodule Commands.Command.Profile do
   defp check_arguments_verify({:ok, _}), do: {:error, "User not found"}
 
   defp send_reply({:error, reason}, {%{discord_id: id}, message}),
-    do: Discord.send("<@#{id}>, #{reason}", :reply, message)
+  do: Discord.send("<@#{id}>, #{reason}", :reply, message)
   defp send_reply({:ok, account}, {_account, message}),
-    do: Discord.send("", account, :reply, message)
+  do: Discord.send("", account, :reply, message)
 end

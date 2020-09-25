@@ -16,23 +16,25 @@ defmodule Commands.Command.Collection do
     |> OptionParser.split()
     |> OptionParser.parse(strict: @command.args_strict, aliases: @command.args_aliases)
     |> check_arguments(account)
+    |> check_account(reply_data)
     |> check_coins()
     |> send_reply(reply_data)
   end
 
   defp check_arguments({_params, [_ | [_ | _]], _errors}, _account), do: {:error, "Too many users given"}
-  defp check_arguments({_params, [], _errors}, account) do
-    {:ok, account}
-    |> check_arguments_verify()
-  end
-  defp check_arguments({_params, [user], _errors}, _account) do
-    {:ok, Database.Account.get(user)}
-    |> check_arguments_verify()
+  defp check_arguments({_params, [], _errors}, account), do: {:ok, account}
+  defp check_arguments({_params, [user], _errors}, _account), do: {:ok, user}
+
+  defp check_account({:error, _reason} = error, _reply_data), do: error
+  defp check_account({:ok, user}, reply_data) do
+    user
+    |> Collector.resolve_account(reply_data)
+    |> check_account_verify()
   end
 
-  defp check_arguments_verify({:ok, {:ok, item}}), do: {:ok, item}
-  defp check_arguments_verify({:ok, %Database.Repo.Account{}} = data), do: data
-  defp check_arguments_verify({:ok, _}), do: {:error, "User not found"}
+  defp check_account_verify({:ok, {:ok, item}}), do: {:ok, item}
+  defp check_account_verify({:ok, %Database.Repo.Account{}} = data), do: data
+  defp check_account_verify({:ok, _}), do: {:error, "User not found"}
 
   defp check_coins({:error, _reason} = error), do: error
   defp check_coins({:ok, account}) do

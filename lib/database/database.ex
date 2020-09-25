@@ -94,6 +94,7 @@ defmodule Database do
     defdelegate get(item), to: Repo.Suggestion
     defdelegate all(), to: Repo.Suggestion
     defdelegate all(params), to: Repo.Suggestion
+    defdelegate modify(item, params), to: Repo.Suggestion
     defdelegate fetch(item, key), to: Repo.Suggestion
     defdelegate reference(item), to: Repo.Suggestion
   end

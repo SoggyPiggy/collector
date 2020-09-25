@@ -9,4 +9,6 @@ defmodule Collector do
   defdelegate collect_coin(account), to: CoinHandler
   defdelegate scrap_coin(coin_instance), to: CoinHandler
   defdelegate scrap_coin_estimate(coin_instance), to: CoinHandler
+
+  defdelegate resolve_account(account_resolvable, reply_data), to: Collector.AccountResolver
 end

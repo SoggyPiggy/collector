@@ -4,6 +4,14 @@ defmodule Changelog.Change.Version_0_4_X do
     name: "Big PP",
     patches: [
       %Changelog.Patch{
+        version: "1",
+        notes: [
+          {"Fixed", [
+            "Missing commit for patch notes"
+          ]},
+        ]
+      },
+      %Changelog.Patch{
         version: "0",
         notes: [
           {"Whats New", [

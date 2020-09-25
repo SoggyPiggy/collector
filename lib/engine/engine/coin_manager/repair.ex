@@ -46,11 +46,8 @@ defmodule Engine.CoinHandler.Repair do
   defp check_params_scrap({:error, _reason} = error, _params), do: error
   defp check_params_scrap({:ok, coin, account}, params) do
     params
-    |> IO.inspect()
     |> Keyword.get(:scrap, 0)
-    |> IO.inspect()
     |> check_params_scrap_verify(coin, account)
-    |> IO.inspect()
   end
 
   defp check_params_scrap_verify(scrap, _coin, _account) when scrap <= 0, do: {:error, "You need to specify to use some scrap"}

@@ -85,7 +85,6 @@ defmodule Discord.Speaker.AccountCompareEmbed do
       |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end),
     most_value_coin:
       account.coin_instances
-      |> IO.inspect()
       |> find_most_valuable(),
     least_value_coin:
       account.coin_instances

@@ -66,7 +66,6 @@ defmodule Discord.Speaker.AccountEmbed do
       |> Enum.reduce(0, fn scrap, acc -> acc + scrap.amount end),
     most_value_coin:
       account.coin_instances
-      |> IO.inspect()
       |> find_most_valuable()
       |> format_single_coin(),
     least_value_coin:

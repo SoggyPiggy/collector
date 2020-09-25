@@ -4,6 +4,11 @@ defmodule Database.Repo.Suggestion do
   require Query
   use Ecto.Schema
 
+  @modifiable [
+    :content,
+    :discord_username
+  ]
+
   schema "suggestions" do
     field :content, :string
     field :discord_username, :string
@@ -13,12 +18,12 @@ defmodule Database.Repo.Suggestion do
     timestamps([type: :utc_datetime, updated_at: false])
   end
 
-  def new(item, name, content), do: new(item, %{name: name, content: content})
+  def new(item, name, content), do: new(item, %{discord_username: name, content: content})
   def new({:ok, item}, params), do: new(item, params)
   def new(account, params) do
     %Database.Repo.Suggestion{}
     |> Database.add_association(account)
-    |> Changeset.cast(params, [:content, :discord_username])
+    |> Changeset.cast(params, @modifiable)
     |> Changeset.validate_required([:content])
     |> Repo.insert()
   end
@@ -58,6 +63,15 @@ defmodule Database.Repo.Suggestion do
     Database.Repo.Suggestion
     |> Query.where(^params)
     |> Database.Repo.all()
+  end
+
+  def modify({:ok, item}, params), do: modify(item, params)
+  def modify(suggestion, params) do
+    suggestion
+    |> get()
+    |> Changeset.cast(params, @modifiable)
+    |> Changeset.validate_required([:content])
+    |> Repo.update()
   end
 
   def fetch(settings, keys) when is_list(keys) do

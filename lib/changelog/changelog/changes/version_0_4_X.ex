@@ -4,6 +4,15 @@ defmodule Changelog.Change.Version_0_4_X do
     name: "Big PP",
     patches: [
       %Changelog.Patch{
+        version: "3",
+        notes: [
+          {"Added", [
+            "6 Subsets",
+            "20 Coins"
+          ]},
+        ]
+      },
+      %Changelog.Patch{
         version: "2",
         notes: [
           {"Changed", [

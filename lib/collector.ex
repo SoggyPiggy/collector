@@ -7,6 +7,7 @@ defmodule Collector do
   defdelegate get_asset_url(item, file_suffix), to: Assets
 
   defdelegate collect_coin(account), to: CoinHandler
+  defdelegate give_coin(coin, account), to: CoinHandler
   defdelegate scrap_coin(coin_instance), to: CoinHandler
   defdelegate scrap_coin_estimate(coin_instance), to: CoinHandler
 

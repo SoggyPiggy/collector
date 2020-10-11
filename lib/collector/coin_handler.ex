@@ -1,6 +1,12 @@
 defmodule Collector.CoinHandler do
   def collect_coin(account) do
     Database.Coin.random()
+    |> give_coin(account)
+  end
+
+  def give_coin(coin, account) do
+    coin
+    |> Database.Coin.get()
     |> Database.CoinInstance.generate()
     |> Database.CoinTransaction.new(account, "collect")
   end

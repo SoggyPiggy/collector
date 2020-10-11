@@ -49,7 +49,7 @@ defmodule Database.Repo.Set do
     |> get()
   end
   def get(params) when is_list(params) do
-    Database.Repo.Coin
+    Database.Repo.Set
     |> Query.where(^params)
     |> Repo.one()
   end

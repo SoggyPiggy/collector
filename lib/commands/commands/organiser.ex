@@ -16,6 +16,7 @@ defmodule Commands.Organiser do
     Command.Suggest,
     Command.Changelog,
     Command.Seed,
+    Command.Give,
     Command.Broadcast,
     Command.ToggleAdmin
   ]

@@ -3,13 +3,9 @@ defmodule Collector.AccountResolver do
   def resolve_account(%Database.Repo.Account{} = account, _reply_data), do: {:ok, account}
   def resolve_account(user, reply_data) do
     user
-    |> IO.inspect()
     |> check_database(Regex.match?(~r/<?@?!?\d+>?/, user))
-    |> IO.inspect()
     |> check_nostrum(reply_data)
-    |> IO.inspect()
     |> validate()
-    |> IO.inspect()
   end
 
   defp check_database(user, false), do: {:error, user}
